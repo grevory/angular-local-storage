@@ -11,12 +11,14 @@ To do:
 
 Example use: 
 
-    angular.module('yourModule', ['LocalStorageModule'])
-    .controller('yourCtrl', [
-      '$scope',
-      'localStorageService',
-      function($scope, localStorageService) {
-        // Start fresh
-        localStorageService.clearAll();
-        localStorageService.add('Favorite Sport','value');
-    }]);
+```javascript
+angular.module('yourModule', ['LocalStorageModule'])
+.controller('yourCtrl', [
+  '$scope',
+  'localStorageService',
+  function($scope, localStorageService) {
+    // Start fresh
+    localStorageService.clearAll();
+    localStorageService.add('Favorite Sport','value');
+}]);
+```
