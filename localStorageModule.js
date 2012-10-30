@@ -1,89 +1,121 @@
-var angularLocalStorage = angular.module('LocalStorageModule', []);
-
-// Lets set the name of your app before we start.
-// We can use this for prefixing the names of Local Storage variables
+// Configure Angular Local Storage
 var settings = {
-  appName: 'youAppNameHere'
+
+  // You should set a prefix to avoid overwriting any local storage variables from the rest of your app
+  // prefix: 'youAppNameHere'
+  appPrefix: 'test'
 };
 
-angularLocalStorage.service('localStorageService', [function() {
-  
-  return {
+/* Start angularLocalStorage */
 
-    // We will prepend the name of the app to the front of each value stored in local storage.
-    // This way we prevent any conflicts with any other data stored in the Local Storage
-    prefix: settings.appName + '.',
+var angularLocalStorage = angular.module('LocalStorageModule', [])
 
-    // Checks the browser to see if local storage is supported
-    isSupported: function () {
-      try {
-          return ('localStorage' in window && window['localStorage'] !== null);           
-      } catch (e) {
-          return false;
-      }
-    },
+// Set the prefix based on the settings object above
+angularLocalStorage.constant('prefix', settings.appPrefix || '');
 
-    // Directly adds a value to local storage
-    // If local storage is not available in the browser use cookies
-    // Example use: localStorageService.add('library','angular');
-    add: function (key, value) {
+angularLocalStorage.service('localStorageService', ['prefix', function(prefix) {
 
-      // If this browser does not support local storage use cookies
-      if (!this.isSupported()) {
-        console.log('Cannot add to local storage. Get from cookies');
-        return false;
-      }
-
-      try {
-        localStorage.setItem(this.prefix+key, value);
-        //or localStorage[key] = value; //like associative arrays
-      } catch (e) {
-        console.error(e.Description);
-        return -1;
-      }
-    },
-
-    // Directly get a value from local storage
-    // Example use: localStorageService.get('library'); // returns 'angular'
-    get: function (key) {
-      if (!this.isSupported()) {
-        console.log('Cannot get from local storage. Use cookies');
-        return false;
-      }
-
-      return localStorage.getItem(this.prefix+key);
-       //or localStorage[key];
-    },
-
-    // Remove an item from local storage
-    // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
-    remove: function (key) {
-      if (!this.isSupported()) {
-        console.log('Cannot remove item from local storage. Remove from cookies');
-        return false;
-      }
-
-      return localStorage.removeItem(key);
-    },
-
-    // Remove all data for this app from local storage
-    // Example use: localStorageService.clearAll();
-    // Should be used mostly for development purposes
-    clearAll: function () {
-      if (!this.isSupported()) {
-        console.log('Cannot remove all items from local storage. Remove all app cookies');
-        return false;
-      }
-
-      var prefixLength = this.prefix.length;
-
-      for (var i in localStorage) {
-        // Only remove items that are for this app
-        if (i.substr(0,prefixLength) === this.prefix)
-          this.remove(i);
-      }
-    },
-
+  // If there is a prefix set in the config lets use that with an appended period for readability
+  //var prefix = angularLocalStorage.constant;
+  if (prefix.substr(-1)!=='.') {
+    prefix = !!prefix ? prefix + '.' : '';
   }
+
+  // Checks the browser to see if local storage is supported
+  var browserSupportsLocalStorage = function () {
+    try {
+        return ('localStorage' in window && window['localStorage'] !== null);           
+    } catch (e) {
+        return false;
+    }
+  };
+
+  // Directly adds a value to local storage
+  // If local storage is not available in the browser use cookies
+  // Example use: localStorageService.add('library','angular');
+  var addToLocalStorage = function (key, value) {
+
+    // If this browser does not support local storage use cookies
+    if (!browserSupportsLocalStorage()) {
+      console.log('Cannot add to local storage. Get from cookies'); // todo
+      return false;
+    }
+
+    // 0 and "" is allowed as a value but let's limit other falsey values like "undefined"
+    if (!value && value!==0 && value!=="") return false;
+
+    try {
+      localStorage.setItem(prefix+key, value);
+    } catch (e) {
+      console.error(e.Description);
+      return false;
+    }
+    return true;
+  };
+
+  // Directly get a value from local storage
+  // Example use: localStorageService.get('library'); // returns 'angular'
+  var getFromLocalStorage = function (key) {
+    if (!browserSupportsLocalStorage()) {
+      console.log('Cannot get from local storage. Use cookies'); // todo
+      return false;
+    }
+
+    var item = localStorage.getItem(prefix+key);
+    if (!item) return null;
+    return item;
+     //or localStorage[key];
+  };
+
+  // Remove an item from local storage
+  // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
+  var removeFromLocalStorage = function (key) {
+    if (!browserSupportsLocalStorage()) {
+      console.log('Cannot remove item from local storage. Remove from cookies'); // todo
+      return false;
+    }
+
+    try {
+      localStorage.removeItem(prefix+key);
+    } catch (e) {
+      console.error(e.Description);
+      return false;
+    }
+    return true;
+  };
+
+  // Remove all data for this app from local storage
+  // Example use: localStorageService.clearAll();
+  // Should be used mostly for development purposes
+  var clearAllFromLocalStorage = function () {
+
+    if (!browserSupportsLocalStorage()) {
+      console.log('Cannot remove all items from local storage. Remove all app cookies'); // todo
+      return false;
+    }
+
+    var prefixLength = prefix.length;
+
+    for (var key in localStorage) {
+      // Only remove items that are for this app
+      if (key.substr(0,prefixLength) === prefix) {
+        try {
+          removeFromLocalStorage(key.substr(prefixLength));
+        } catch (e) {
+          console.error(e.Description);
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  return {
+    isSupported: browserSupportsLocalStorage,
+    add: addToLocalStorage,
+    get: getFromLocalStorage,
+    remove: removeFromLocalStorage,
+    clearAll: clearAllFromLocalStorage
+  };
 
 }]);
