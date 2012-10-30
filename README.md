@@ -3,11 +3,11 @@ angular-local-storage
 
 An Angular module that gives you access to the browsers local storage
 
-Remember to set your app name (settings.appName) in the settings at the beginning of localStorageModule.js.
+Remember to set your app name (settings.appPrefix) in the settings at the beginning of localStorageModule.js.
 
 To do:
-- Make appName available to Angular for manipulation
 - Set cookies as a failback for browsers that do not support local storage
+- Expand Readme
 
 Example use: 
 
