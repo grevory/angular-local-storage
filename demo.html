@@ -69,6 +69,8 @@ var YourCtrl = function($scope, localStorageService, ...) {
   localStorageService.add('localStorageKey','Add this!');
   // Read that value back
   var value = localStorageService.get('localStorageKey');
+  // You can also play with cookies the same way
+  localStorageService.cookie.add('localStorageKey','I am a cookie value now');
 }</pre>
 
   <h3>API Access</h3>
@@ -85,7 +87,7 @@ var YourCtrl = function($scope, localStorageService, ...) {
     <tbody>
       <tr>
         <td><code>isSupported</code></td>
-        <td class="muted">n/a</td>
+        <td class="muted"><small>n/a</small></td>
         <td>Checks the browsers support for local storage</td>
         <td>Boolean for success</td>
       </tr>
@@ -112,6 +114,12 @@ var YourCtrl = function($scope, localStorageService, ...) {
         <td class="muted">n/a</td>
         <td><span class="label label-warning">Warning</span> Removes all local storage key-value pairs for this app.</td>
         <td>Boolean for success</td>
+      </tr>
+      <tr>
+        <td><code>cookie</code></td>
+        <td><small>add | get | remove | clearAll</small></td>
+        <td>Each function within cookie uses the same arguments as the coresponding local storage functions</td>
+        <td>n/a</td>
       </tr>
     </tbody>
   </table>
