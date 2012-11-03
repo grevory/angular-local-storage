@@ -22,3 +22,4 @@ angular.module('yourModule', ['LocalStorageModule'])
     localStorageService.add('Favorite Sport','value');
 }]);
 ```
+Check out the full demo and documentation at http://gregpike.net/demos/angular-local-storage/demo.html
