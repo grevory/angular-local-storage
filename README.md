@@ -19,7 +19,7 @@ angular.module('yourModule', ['LocalStorageModule'])
   function($scope, localStorageService) {
     // Start fresh
     localStorageService.clearAll();
-    localStorageService.add('Favorite Sport','value');
+    localStorageService.add('Favorite Sport','Ultimate Frisbee');
 }]);
 ```
 Check out the full demo and documentation at http://gregpike.net/demos/angular-local-storage/demo.html
