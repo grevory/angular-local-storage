@@ -6,5 +6,4 @@ var DemoCtrl = function($scope, localStorageService) {
     localStorageService.add('localStorageDemo',value);
     $scope.localStorageDemoValue = localStorageService.get('localStorageDemo');
   });
-
-}; 
+};
