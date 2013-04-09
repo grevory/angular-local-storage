@@ -11,8 +11,8 @@ angularLocalStorage.constant('prefix', 'ls');
 angularLocalStorage.constant('cookie', { expiry:30, path: '/'});
 
 angularLocalStorage.service('localStorageService', [
-  '$rootScope', 
-  'prefix', 
+  '$rootScope',
+  'prefix',
   'cookie',
   function($rootScope, prefix, cookie) {
 
@@ -25,7 +25,7 @@ angularLocalStorage.service('localStorageService', [
   // Checks the browser to see if local storage is supported
   var browserSupportsLocalStorage = function () {
     try {
-        return ('localStorage' in window && window['localStorage'] !== null);           
+        return ('localStorage' in window && window['localStorage'] !== null);
     } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
         return false;
@@ -40,7 +40,7 @@ angularLocalStorage.service('localStorageService', [
     // If this browser does not support local storage use cookies
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
-      return false;
+      return addToCookies(key, value);
     }
 
     // 0 and "" is allowed as a value but let's limit other falsey values like "undefined"
@@ -50,7 +50,7 @@ angularLocalStorage.service('localStorageService', [
       localStorage.setItem(prefix+key, value);
     } catch (e) {
       $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
-      return false;
+      return addToCookies(key, value);
     }
     return true;
   };
@@ -60,7 +60,7 @@ angularLocalStorage.service('localStorageService', [
   var getFromLocalStorage = function (key) {
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
-      return false;
+      return getFromCookies(key);
     }
 
     var item = localStorage.getItem(prefix+key);
@@ -73,14 +73,14 @@ angularLocalStorage.service('localStorageService', [
   var removeFromLocalStorage = function (key) {
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
-      return false;
+      return removeFromCookies(key);
     }
 
     try {
       localStorage.removeItem(prefix+key);
     } catch (e) {
       $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
-      return false;
+      return removeFromCookies(key);
     }
     return true;
   };
@@ -92,7 +92,7 @@ angularLocalStorage.service('localStorageService', [
 
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
-      return false;
+      return clearAllFromCookies();
     }
 
     var prefixLength = prefix.length;
@@ -104,7 +104,7 @@ angularLocalStorage.service('localStorageService', [
           removeFromLocalStorage(key.substr(prefixLength));
         } catch (e) {
           $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
-          return false;
+          return clearAllFromCookies();
         }
       }
     }
@@ -167,7 +167,7 @@ angularLocalStorage.service('localStorageService', [
       while (thisCookie.charAt(0)==' ') {
         thisCookie = thisCookie.substring(1,thisCookie.length);
       }
-      if (thisCookie.indexOf(prefix+key+'=') == 0) {
+      if (thisCookie.indexOf(prefix+key+'=') === 0) {
         return decodeURIComponent(thisCookie.substring(prefix.length+key.length+1,thisCookie.length));
       }
     }
