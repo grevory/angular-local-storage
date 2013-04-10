@@ -27,7 +27,7 @@ angularLocalStorage.service('localStorageService', [
     try {
         return ('localStorage' in window && window['localStorage'] !== null);           
     } catch (e) {
-        $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
+        $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
         return false;
     }
   };
@@ -49,7 +49,7 @@ angularLocalStorage.service('localStorageService', [
     try {
       localStorage.setItem(prefix+key, value);
     } catch (e) {
-      $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
+      $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
       return false;
     }
     return true;
@@ -79,7 +79,7 @@ angularLocalStorage.service('localStorageService', [
     try {
       localStorage.removeItem(prefix+key);
     } catch (e) {
-      $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
+      $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
       return false;
     }
     return true;
@@ -103,7 +103,7 @@ angularLocalStorage.service('localStorageService', [
         try {
           removeFromLocalStorage(key.substr(prefixLength));
         } catch (e) {
-          $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
+          $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
           return false;
         }
       }
@@ -118,7 +118,7 @@ angularLocalStorage.service('localStorageService', [
         ("cookie" in document && (document.cookie.length > 0 ||
         (document.cookie = "test").indexOf.call(document.cookie, "test") > -1));
     } catch (e) {
-      $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
+      $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
       return false;
     }
   };
@@ -147,7 +147,7 @@ angularLocalStorage.service('localStorageService', [
       }
       document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + "; path="+cookie.path;
     } catch (e) {
-      $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
+      $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
       return false;
     }
     return true;
