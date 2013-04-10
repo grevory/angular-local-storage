@@ -143,9 +143,11 @@ angularLocalStorage.service('localStorageService', [
       }
       if (cookie.expiry !== 0) {
         expiryDate.setTime(expiryDate.getTime() + (cookie.expiry*24*60*60*1000));
-        expiry = "; expires="+expiryDate.toGMTString();
+        expiry = ", expires="+expiryDate.toGMTString();
       }
-      document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + "; path="+cookie.path;
+      if (!!key) {
+        document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + ", path="+cookie.path;
+      }
     } catch (e) {
       $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
       return false;
@@ -161,7 +163,7 @@ angularLocalStorage.service('localStorageService', [
       return false;
     }
 
-    var cookies = document.cookie.split(';');
+    var cookies = document.cookie.split(',');
     for(var i=0;i < cookies.length;i++) {
       var thisCookie = cookies[i];
       while (thisCookie.charAt(0)==' ') {
