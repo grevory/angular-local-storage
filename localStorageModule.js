@@ -9,12 +9,14 @@ angularLocalStorage.constant('prefix', 'ls');
 // expiry = Number of days before cookies expire // 0 = Does not expire
 // path = The web path the cookie represents
 angularLocalStorage.constant('cookie', { expiry:30, path: '/'});
+angularLocalStorage.constant('notify', { setItem: true, removeItem: false} );
 
 angularLocalStorage.service('localStorageService', [
   '$rootScope',
   'prefix',
   'cookie',
-  function($rootScope, prefix, cookie) {
+  'notify',
+  function($rootScope, prefix, cookie, notify) {
 
   // If there is a prefix set in the config lets use that with an appended period for readability
   //var prefix = angularLocalStorage.constant;
@@ -40,6 +42,9 @@ angularLocalStorage.service('localStorageService', [
     // If this browser does not support local storage use cookies
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
+      if (notify.setItem) {
+        $rootScope.$broadcast('LocalStorageModule.notification.setItem', {key: key, newvalue: value, storageType: 'cookie'});
+      }
       return addToCookies(key, value);
     }
 
@@ -48,6 +53,9 @@ angularLocalStorage.service('localStorageService', [
 
     try {
       localStorage.setItem(prefix+key, value);
+      if (notify.setItem) {
+        $rootScope.$broadcast('LocalStorageModule.notification.setItem', {key: key, newvalue: value, storageType: 'localStorage'});
+      }
     } catch (e) {
       $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
       return addToCookies(key, value);
@@ -73,11 +81,17 @@ angularLocalStorage.service('localStorageService', [
   var removeFromLocalStorage = function (key) {
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
+       if (notify.removeItem) {
+        $rootScope.$broadcast('LocalStorageModule.notification.removeItem', {key: key, storageType: 'cookie'});
+      }
       return removeFromCookies(key);
     }
 
     try {
       localStorage.removeItem(prefix+key);
+      if (notify.removeItem) {
+        $rootScope.$broadcast('LocalStorageModule.notification.removeItem', {key: key, storageType: 'localStorage'});
+      }
     } catch (e) {
       $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
       return removeFromCookies(key);
