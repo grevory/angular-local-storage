@@ -43,7 +43,7 @@ angularLocalStorage.service('localStorageService', [
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
       if (notify.setItem) {
-        $rootScope.$broadcast('LocalStorageModule.notification.setItem', {key: key, newvalue: value, storageType: 'cookie'});
+        $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'cookie'});
       }
       return addToCookies(key, value);
     }
@@ -54,7 +54,7 @@ angularLocalStorage.service('localStorageService', [
     try {
       localStorage.setItem(prefix+key, value);
       if (notify.setItem) {
-        $rootScope.$broadcast('LocalStorageModule.notification.setItem', {key: key, newvalue: value, storageType: 'localStorage'});
+        $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'localStorage'});
       }
     } catch (e) {
       $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
@@ -82,7 +82,7 @@ angularLocalStorage.service('localStorageService', [
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
        if (notify.removeItem) {
-        $rootScope.$broadcast('LocalStorageModule.notification.removeItem', {key: key, storageType: 'cookie'});
+        $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'cookie'});
       }
       return removeFromCookies(key);
     }
@@ -90,7 +90,7 @@ angularLocalStorage.service('localStorageService', [
     try {
       localStorage.removeItem(prefix+key);
       if (notify.removeItem) {
-        $rootScope.$broadcast('LocalStorageModule.notification.removeItem', {key: key, storageType: 'localStorage'});
+        $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'localStorage'});
       }
     } catch (e) {
       $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
