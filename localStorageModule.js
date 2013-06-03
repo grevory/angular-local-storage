@@ -236,14 +236,16 @@ angularLocalStorage.service('localStorageService', [
 
   return {
     isSupported: browserSupportsLocalStorage,
-    add: addToLocalStorage,
+    set: addToLocalStorage, 
+    add: addToLocalStorage, //DEPRECATED
     get: getFromLocalStorage,
     remove: removeFromLocalStorage,
     clearAll: clearAllFromLocalStorage,
     stringifyJson: stringifyJson,
     parseJson: parseJson,
     cookie: {
-      add: addToCookies,
+      set: addToCookies,
+      add: addToCookies, //DEPRECATED
       get: getFromCookies,
       remove: removeFromCookies,
       clearAll: clearAllFromCookies
