@@ -48,9 +48,6 @@ angularLocalStorage.service('localStorageService', [
       return addToCookies(key, value);
     }
 
-    // 0 and "" is allowed as a value but let's limit other falsey values like "undefined"
-    if (!value && value!==0 && value!=="") return false;
-
     try {
       localStorage.setItem(prefix+key, value);
       if (notify.setItem) {
