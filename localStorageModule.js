@@ -48,6 +48,9 @@ angularLocalStorage.service('localStorageService', [
       return addToCookies(key, value);
     }
 
+    // Let's convert undefined values to null to get the value consistent
+    if (typeof value == "undefined") value = null;
+
     try {
       localStorage.setItem(prefix+key, value);
       if (notify.setItem) {
