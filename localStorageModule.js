@@ -214,32 +214,6 @@ angularLocalStorage.service('localStorageService', [
     }
   };
 
-  // JSON stringify functions based on https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/JSON
-  var stringifyJson = function (vContent, isJSON) {
-    // If this is only a string and not a string in a recursive run of an object then let's return the string unadulterated
-    if (typeof vContent === "string" && vContent.charAt(0) !== "{" && !isJSON) {
-      return vContent;
-    }
-    if (vContent instanceof Object) {
-      var sOutput = "";
-      if (vContent.constructor === Array) {
-        for (var nId = 0; nId < vContent.length; sOutput += this.stringifyJson(vContent[nId], true) + ",", nId++);
-        return "[" + sOutput.substr(0, sOutput.length - 1) + "]";
-      }
-      if (vContent.toString !== Object.prototype.toString) { return "\"" + vContent.toString().replace(/"/g, "\\$&") + "\""; }
-      for (var sProp in vContent) { sOutput += "\"" + sProp.replace(/"/g, "\\$&") + "\":" + this.stringifyJson(vContent[sProp], true) + ","; }
-      return "{" + sOutput.substr(0, sOutput.length - 1) + "}";
-    }
-    return typeof vContent === "string" ? "\"" + vContent.replace(/"/g, "\\$&") + "\"" : String(vContent);
-  };
-
-  var parseJson = function (sJSON) {
-    if (sJSON.charAt(0)!=='{') {
-      return sJSON;
-    }
-    return eval("(" + sJSON + ")");
-  };
-
   return {
     isSupported: browserSupportsLocalStorage,
     set: addToLocalStorage, 
@@ -247,8 +221,6 @@ angularLocalStorage.service('localStorageService', [
     get: getFromLocalStorage,
     remove: removeFromLocalStorage,
     clearAll: clearAllFromLocalStorage,
-    stringifyJson: stringifyJson,
-    parseJson: parseJson,
     cookie: {
       set: addToCookies,
       add: addToCookies, //DEPRECATED
