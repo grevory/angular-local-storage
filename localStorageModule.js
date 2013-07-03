@@ -1,3 +1,4 @@
+
 /* Start angularLocalStorage */
 
 var angularLocalStorage = angular.module('LocalStorageModule', []);
@@ -52,7 +53,7 @@ angularLocalStorage.service('localStorageService', [
     if (typeof value == "undefined") value = null;
 
     try {
-      if (angular.isObject(value)) {
+      if (angular.isObject(value) || angular.isArray(value)) {
           value = angular.toJson(value);
       }
       localStorage.setItem(prefix+key, value);
@@ -76,7 +77,7 @@ angularLocalStorage.service('localStorageService', [
 
     var item = localStorage.getItem(prefix+key);
     if (!item) return null;
-    if (item.charAt(0) === "{") {
+    if (item.charAt(0) === "{" || item.charAt(0) === "[") {
         return angular.fromJson(item);
     }
     return item;
