@@ -106,6 +106,31 @@ angularLocalStorage.service('localStorageService', [
     return true;
   };
 
+  // Return array of keys for local storage
+  // Example use: var keys = localStorageService.keys()
+  var getKeysForLocalStorage = function () {
+
+    if (!browserSupportsLocalStorage()) {
+      $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
+      return false;
+    }
+
+    var prefixLength = prefix.length;
+    var keys = [];
+    for (var key in localStorage) {
+      // Only return keys that are for this app
+      if (key.substr(0,prefixLength) === prefix) {
+        try {
+          keys.push(key.substr(prefixLength))
+        } catch (e) {
+          $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
+          return [];
+        }
+      }
+    }
+    return keys;
+  };
+
   // Remove all data for this app from local storage
   // Example use: localStorageService.clearAll();
   // Should be used mostly for development purposes
@@ -220,6 +245,7 @@ angularLocalStorage.service('localStorageService', [
     set: addToLocalStorage, 
     add: addToLocalStorage, //DEPRECATED
     get: getFromLocalStorage,
+    keys: getKeysForLocalStorage,
     remove: removeFromLocalStorage,
     clearAll: clearAllFromLocalStorage,
     cookie: {
