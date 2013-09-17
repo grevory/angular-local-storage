@@ -50,7 +50,9 @@ angularLocalStorage.service('localStorageService', [
     }
 
     // Let's convert undefined values to null to get the value consistent
-    if (typeof value == "undefined") value = null;
+    if (typeof value == "undefined") {
+      value = null;
+    }
 
     try {
       if (angular.isObject(value) || angular.isArray(value)) {
@@ -76,7 +78,9 @@ angularLocalStorage.service('localStorageService', [
     }
 
     var item = localStorage.getItem(prefix+key);
-    if (!item) return null;
+    if (!item) {
+      return null;
+    }
     if (item.charAt(0) === "{" || item.charAt(0) === "[") {
         return angular.fromJson(item);
     }
@@ -121,7 +125,7 @@ angularLocalStorage.service('localStorageService', [
       // Only return keys that are for this app
       if (key.substr(0,prefixLength) === prefix) {
         try {
-          keys.push(key.substr(prefixLength))
+          keys.push(key.substr(prefixLength));
         } catch (e) {
           $rootScope.$broadcast('LocalStorageModule.notification.error',e.Description);
           return [];
@@ -174,7 +178,9 @@ angularLocalStorage.service('localStorageService', [
   // Example use: localStorageService.cookie.add('library','angular');
   var addToCookies = function (key, value) {
 
-    if (typeof value == "undefined") return false;
+    if (typeof value == "undefined") {
+      return false;
+    }
 
     if (!browserSupportsCookies()) {
       $rootScope.$broadcast('LocalStorageModule.notification.error','COOKIES_NOT_SUPPORTED');
@@ -242,7 +248,7 @@ angularLocalStorage.service('localStorageService', [
 
   return {
     isSupported: browserSupportsLocalStorage,
-    set: addToLocalStorage, 
+    set: addToLocalStorage,
     add: addToLocalStorage, //DEPRECATED
     get: getFromLocalStorage,
     keys: getKeysForLocalStorage,
