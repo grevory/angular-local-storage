@@ -190,10 +190,12 @@ angularLocalStorage.service('localStorageService', [
     try {
       var expiry = '', expiryDate = new Date();
       if (value === null) {
-        cookie.expiry = -1;
+        // Mark that the cookie has expired one day ago
+        expiryDate.setTime(expiryDate.getTime() + (-1 * 24*60*60*1000));
+        expiry = "; expires="+expiryDate.toGMTString();
+
         value = '';
-      }
-      if (cookie.expiry !== 0) {
+      } else if (cookie.expiry !== 0) {
         expiryDate.setTime(expiryDate.getTime() + (cookie.expiry*24*60*60*1000));
         expiry = "; expires="+expiryDate.toGMTString();
       }
