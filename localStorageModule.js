@@ -1,4 +1,4 @@
-
+(function() {
 /* Start angularLocalStorage */
 
 var angularLocalStorage = angular.module('LocalStorageModule', []);
@@ -264,3 +264,4 @@ angularLocalStorage.service('localStorageService', [
   };
 
 }]);
+}).call(this);
