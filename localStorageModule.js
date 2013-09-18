@@ -78,9 +78,10 @@ angularLocalStorage.service('localStorageService', [
     }
 
     var item = localStorage.getItem(prefix+key);
-    if (!item) {
-      return null;
-    }
+	// angular.toJson will convert null to 'null', so a proper conversion is needed
+	// FIXME not a perfect solution, since a valid 'null' string can't be stored
+	if (!item || item === 'null') return null;
+
     if (item.charAt(0) === "{" || item.charAt(0) === "[") {
         return angular.fromJson(item);
     }
