@@ -137,9 +137,16 @@ angularLocalStorage.service('localStorageService', [
   };
 
   // Remove all data for this app from local storage
+  // Also takes a regular expression string and removes the matching keys-value pairs
   // Example use: localStorageService.clearAll();
   // Should be used mostly for development purposes
-  var clearAllFromLocalStorage = function () {
+  var clearAllFromLocalStorage = function (regular_expression) {
+
+    regular_expression = regular_expression || "";
+    //accounting for the '.' in the prefix
+    var temp_prefix = prefix.slice(0, -1) + "\.";
+    var testregex = RegExp(temp_prefix + regular_expression);
+    console.log('test regex: ', testregex);
 
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
@@ -149,10 +156,11 @@ angularLocalStorage.service('localStorageService', [
     var prefixLength = prefix.length;
 
     for (var key in localStorage) {
-      // Only remove items that are for this app
-      if (key.substr(0,prefixLength) === prefix) {
+      // Only remove items that are for this app and match the regular expression
+
+      if (testregex.test(key)) {
         try {
-          removeFromLocalStorage(key.substr(prefixLength));
+            removeFromLocalStorage(key.substr(prefixLength));
         } catch (e) {
           $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
           return clearAllFromCookies();
