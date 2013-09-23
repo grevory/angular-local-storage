@@ -4,7 +4,7 @@
   "description": "An Angular module that gives you access to the browsers local storage",
   "main": "localStorageModule.js",
   "scripts": {
-    "test": ""
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,15 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/grevory/angular-local-storage/issues"
+  },
+  "dependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9"
+  },
+  "devDependencies": {
+    "time-grunt": "~0.1.1",
+    "load-grunt-tasks": "~0.1.0",
+    "grunt-karma": "~0.6.2",
+    "grunt-contrib-jshint": "~0.6.4"
   }
 }
