@@ -142,11 +142,11 @@ angularLocalStorage.service('localStorageService', [
   // Should be used mostly for development purposes
   var clearAllFromLocalStorage = function (regular_expression) {
 
-    regular_expression = regular_expression || "";
-    //accounting for the '.' in the prefix
+    var regular_expression = regular_expression || "";
+    //accounting for the '.' in the prefix when creating a regex
     var temp_prefix = prefix.slice(0, -1) + "\.";
+    //regex to test the local storage keys against
     var testregex = RegExp(temp_prefix + regular_expression);
-    console.log('test regex: ', testregex);
 
     if (!browserSupportsLocalStorage()) {
       $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
@@ -157,10 +157,9 @@ angularLocalStorage.service('localStorageService', [
 
     for (var key in localStorage) {
       // Only remove items that are for this app and match the regular expression
-
       if (testregex.test(key)) {
         try {
-            removeFromLocalStorage(key.substr(prefixLength));
+          removeFromLocalStorage(key.substr(prefixLength));
         } catch (e) {
           $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
           return clearAllFromCookies();
