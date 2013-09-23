@@ -19,5 +19,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "angularjs": "*",
+    "angular-mocks": "~1.0.8"
+  }
 }
