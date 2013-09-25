@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         }
       },
       dev: {
-        src: [ 'localStorageModule.js' ],
+        src: [ 'angular-local-storage.js' ],
         options: {
           jshintrc: '.jshintrc',
         }
