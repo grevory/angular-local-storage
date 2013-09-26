@@ -5,12 +5,11 @@
   "authors": [
     "grevory <greg@gregpike.ca>"
   ],
-  "description": "An Angular module that gives you access to the browsers local storage",
+  "description": "An Angular module that gives you access to the browser's local storage",
   "main": "angular-local-storage.js",
   "keywords": [
     "AngularJS",
-    "Local",
-    "Storage"
+    "Local Storage"
   ],
   "license": "MIT",
   "ignore": [
