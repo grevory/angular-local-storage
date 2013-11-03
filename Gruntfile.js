@@ -10,13 +10,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     karma: {
       options: {
-        autowatch: false,
+        autowatch: true,
         browsers: [
           'PhantomJS'
         ],
         configFile: 'test/karma.conf.js',
         reporters: [ 'dots' ],
-        singleRun: true
+        singleRun: false
       },
       unit: {}
     },
