@@ -28,7 +28,20 @@ angularLocalStorage.service('localStorageService', [
   // Checks the browser to see if local storage is supported
   var browserSupportsLocalStorage = function () {
     try {
-        return ('localStorage' in window && window['localStorage'] !== null);
+        var supported = ('localStorage' in window && window['localStorage'] !== null);
+
+        // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
+        // is available, but trying to call .setItem throws an exception.
+        //
+        // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage
+        // that exceeded the quota."
+        var key = prefix + '__' + Math.round(Math.random() * 1e7);
+        if (supported) {
+            localStorage.setItem(key, '');
+            localStorage.removeItem(key);
+        }
+
+        return true;
     } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
         return false;
