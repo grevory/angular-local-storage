@@ -15,28 +15,35 @@ module.exports = function(grunt) {
           'PhantomJS'
         ],
         configFile: 'test/karma.conf.js',
-        reporters: [ 'dots' ],
+        reporters: ['dots'],
         singleRun: false
       },
       unit: {}
     },
     jshint: {
       grunt: {
-        src: [ 'Gruntfile.js' ],
+        src: ['Gruntfile.js'],
         options: {
           node: true
         }
       },
       dev: {
-        src: [ 'angular-local-storage.js' ],
+        src: ['angular-local-storage.js'],
         options: {
           jshintrc: '.jshintrc',
         }
       },
       test: {
-        src: [ 'test/spec/**/*.js' ],
+        src: ['test/spec/**/*.js'],
         options: {
           jshintrc: 'test/.jshintrc',
+        }
+      }
+    },
+    uglify: {
+      dist: {
+        files: {
+          'angular-local-storage.min.js': 'angular-local-storage.js'
         }
       }
     }
@@ -49,5 +56,9 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'jshint',
     'test'
+  ]);
+
+  grunt.registerTask('dist', [
+    'uglify'
   ]);
 };
