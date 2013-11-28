@@ -1,60 +1,50 @@
 (function() {
-    /* Start angularLocalStorage */
-    'use strict';
-    var angularLocalStorage = angular.module('LocalStorageModule', []);
+/* Start angularLocalStorage */
+'use strict';
+var angularLocalStorage = angular.module('LocalStorageModule', []);
 
-    angularLocalStorage.provider('localStorageService', function(){
-// You should set a prefix to avoid overwriting any local storage variables from the rest of your app
-// e.g. angularLocalStorage.constant('prefix', 'youAppName');
-        this.prefix = 'ls';
-// Cookie options (usually in case of fallback)
-// expiry = Number of days before cookies expire // 0 = Does not expire
-// path = The web path the cookie represents
-        this.cookie = {
-            expiry: 30,
-            path: '/'
-        };
-        this.notify = {
-            setItem: true,
-            removeItem: false
-        };
-        this.setPrefix = function(prefix){
-            this.prefix = prefix;
-        };
-        this.setStorageCookie = function(exp, path){
-            this.cookie = {
-                expiry: exp,
-                path: path
-            };
-        };
-        this.setNotify = function(itemSet, itemRemove){
-            this.notify = {
-                setItem: itemSet,
-                removeItem: itemRemove
-            };
-        };
+angularLocalStorage.provider('localStorageService', function(){
+  // You should set a prefix to avoid overwriting any local storage variables from the rest of your app
+  // e.g. angularLocalStorage.constant('prefix', 'youAppName');
+  this.prefix = 'ls';
+  // Cookie options (usually in case of fallback)
+  // expiry = Number of days before cookies expire // 0 = Does not expire
+  // path = The web path the cookie represents
+  this.cookie = {
+    expiry: 30,
+    path: '/'
+  };
+  this.notify = {
+    setItem: true,
+    removeItem: false
+  };
+  this.setPrefix = function(prefix){
+    this.prefix = prefix;
+  };
+  this.setStorageCookie = function(exp, path){
+    this.cookie = {
+      expiry: exp,
+      path: path
+    };
+  };
+  this.setNotify = function(itemSet, itemRemove){
+    this.notify = {
+      setItem: itemSet,
+      removeItem: itemRemove
+    };
+  };
 
-        this.$get = ['$rootScope',function($rootScope){
-            var prefix = this.prefix;
-            // If there is a prefix set in the config lets use that with an appended period for readability
-            //var prefix = angularLocalStorage.constant;
-            if (prefix.substr(-1)!=='.') {
-                prefix = !!prefix ? prefix + '.' : '';
-            }
+  this.$get = ['$rootScope',function($rootScope){
 
-            // Checks the browser to see if local storage is supported
-            var browserSupportsLocalStorage = function () {
-                try {
-                    return ('localStorage' in window && window.localStorage !== null);
-                } catch (e) {
-                    $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
-                    return false;
-                }
-            };
+    var prefix = this.prefix;
+    // If there is a prefix set in the config lets use that with an appended period for readability
+    if (prefix.substr(-1)!=='.') {
+        prefix = !!prefix ? prefix + '.' : '';
+    }
 
-  // Checks the browser to see if local storage is supported
-  var browserSupportsLocalStorage = function () {
-    try {
+    // Checks the browser to see if local storage is supported
+    var browserSupportsLocalStorage = function () {
+      try {
         var supported = ('localStorage' in window && window['localStorage'] !== null);
 
         // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
@@ -64,16 +54,16 @@
         // that exceeded the quota."
         var key = prefix + '__' + Math.round(Math.random() * 1e7);
         if (supported) {
-            localStorage.setItem(key, '');
-            localStorage.removeItem(key);
+          localStorage.setItem(key, '');
+          localStorage.removeItem(key);
         }
 
         return true;
-    } catch (e) {
+      } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
         return false;
-    }
-  };
+      }
+    };
 
                 // If this browser does not support local storage use cookies
                 if (!browserSupportsLocalStorage()) {
