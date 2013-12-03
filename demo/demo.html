@@ -112,7 +112,7 @@ var YourCtrl = function($scope, localStorageService, ...) {
       <tr>
         <td><code>clearAll</code></td>
         <td class="muted">n/a</td>
-        <td><span class="label label-warning">Warning</span> Removes all local storage key-value pairs for this app.</td>
+        <td><span class="label label-warning">Warning</span> Removes all local storage key-value pairs for this app. It will optionally take a string, which is converted to a regular expression, and then clears keys based on that regular expression.</td>
         <td>Boolean for success</td>
       </tr>
       <tr>
