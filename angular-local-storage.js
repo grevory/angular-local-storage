@@ -37,6 +37,9 @@ angularLocalStorage.provider('localStorageService', function(){
   this.$get = ['$rootScope', function($rootScope){
 
     var prefix = this.prefix;
+    var cookie = this.cookie;
+    var notify = this.notify;
+
     // If there is a prefix set in the config lets use that with an appended period for readability
     if (prefix.substr(-1) !== '.') {
       prefix = !!prefix ? prefix + '.' : '';
