@@ -295,7 +295,7 @@ angularLocalStorage.provider('localStorageService', function(){
           thisCookie = thisCookie.substring(1, thisCookie.length);
         }
 
-        key = thisCookie.substring(prefixLength, thisCookie.indexOf('='));
+        var key = thisCookie.substring(prefixLength, thisCookie.indexOf('='));
         removeFromCookies(key);
       }
     };
