@@ -9,7 +9,7 @@ var DemoCtrl = function($scope, localStorageService) {
 
   $scope.storageType = 'Local storage';
 
-  if (!localStorageService.isSupported()) {
+  if (!localStorageService.isSupported) {
     $scope.storageType = 'Cookie';
   }
 
