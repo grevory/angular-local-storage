@@ -31,7 +31,8 @@ angular.module('yourModule', ['LocalStorageModule'])
 }]);
 
 /*
-To set the prefix of your localStorage name, you can use the setPrefix method available on the localStorageServiceProvider
+To set the prefix of your localStorage name, you can use the setPrefix method 
+available on the localStorageServiceProvider
 */
 angular.module('yourModule', ['LocalStorageModule'])
 .config(['localStorageServiceProvider', function(localStorageServiceProvider){
