@@ -5,13 +5,14 @@ var angularLocalStorage = angular.module('LocalStorageModule', []);
 
 angularLocalStorage.provider('localStorageService', function(){
   // You should set a prefix to avoid overwriting any local storage variables from the rest of your app
-  // e.g. angularLocalStorage.constant('prefix', 'youAppName');
+  // e.g. localStorageServiceProvider.setPrefix('youAppName');
   // With provider you can use config as this:
   // myApp.config(function (localStorageServiceProvider) {
   //    localStorageServiceProvider.prefix = 'yourAppName';
   // });
 
-    this.prefix = 'ls';
+  this.prefix = 'ls';
+
   // Cookie options (usually in case of fallback)
   // expiry = Number of days before cookies expire // 0 = Does not expire
   // path = The web path the cookie represents
@@ -19,19 +20,28 @@ angularLocalStorage.provider('localStorageService', function(){
     expiry: 30,
     path: '/'
   };
+
+  // Send signals for each of the following actions?
   this.notify = {
     setItem: true,
     removeItem: false
   };
+
+  // Setter for the prefix
   this.setPrefix = function(prefix){
     this.prefix = prefix;
   };
+
+  // Setter for cookie config
   this.setStorageCookie = function(exp, path){
     this.cookie = {
       expiry: exp,
       path: path
     };
   };
+
+  // Setter for notification config
+  // itemSet & itemRemove should be booleans
   this.setNotify = function(itemSet, itemRemove){
     this.notify = {
       setItem: itemSet,
