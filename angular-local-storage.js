@@ -49,7 +49,7 @@ angularLocalStorage.provider('localStorageService', function(){
     };
   };
 
-  this.$get = ['$rootScope', function($rootScope){
+  this.$get = ['$rootScope', '$window', '$document', function($rootScope, $window, $document){
 
     var prefix = this.prefix;
     var cookie = this.cookie;
@@ -63,7 +63,7 @@ angularLocalStorage.provider('localStorageService', function(){
     // Checks the browser to see if local storage is supported
     var browserSupportsLocalStorage = (function () {
       try {
-        var supported = ('localStorage' in window && window['localStorage'] !== null);
+        var supported = ('localStorage' in $window && $window['localStorage'] !== null);
 
         // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
         // is available, but trying to call .setItem throws an exception.
@@ -224,8 +224,8 @@ angularLocalStorage.provider('localStorageService', function(){
     var browserSupportsCookies = function() {
       try {
         return navigator.cookieEnabled ||
-          ("cookie" in document && (document.cookie.length > 0 ||
-          (document.cookie = "test").indexOf.call(document.cookie, "test") > -1));
+          ("cookie" in $document && ($document.cookie.length > 0 ||
+          ($document.cookie = "test").indexOf.call($document.cookie, "test") > -1));
       } catch (e) {
           $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
           return false;
@@ -260,7 +260,7 @@ angularLocalStorage.provider('localStorageService', function(){
           expiry = "; expires=" + expiryDate.toGMTString();
         }
         if (!!key) {
-          document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + "; path="+cookie.path;
+          $document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + "; path="+cookie.path;
           }
       } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
@@ -277,7 +277,7 @@ angularLocalStorage.provider('localStorageService', function(){
         return false;
       }
 
-      var cookies = document.cookie.split(';');
+      var cookies = $document.cookie.split(';');
       for(var i=0;i < cookies.length;i++) {
         var thisCookie = cookies[i];
         while (thisCookie.charAt(0)===' ') {
@@ -297,7 +297,7 @@ angularLocalStorage.provider('localStorageService', function(){
     var clearAllFromCookies = function () {
       var thisCookie = null, thisKey = null;
       var prefixLength = prefix.length;
-      var cookies = document.cookie.split(';');
+      var cookies = $document.cookie.split(';');
       for(var i = 0; i < cookies.length; i++) {
         thisCookie = cookies[i];
         
