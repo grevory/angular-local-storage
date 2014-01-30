@@ -49,7 +49,7 @@ angularLocalStorage.provider('localStorageService', function(){
     };
   };
 
-  this.$get = ['$rootScope', function($rootScope){
+  this.$get = ['$rootScope', '$window', '$document', function($rootScope, $window, $document){
 
     var prefix = this.prefix;
     var cookie = this.cookie;
