@@ -35,6 +35,11 @@ angularLocalStorage.provider('localStorageService', function(){
     this.prefix = prefix;
   };
 
+   // Setter for the storageType
+   this.setStorageType = function(storageType){
+       this.storageType = storageType;
+   };
+
   // Setter for cookie config
   this.setStorageCookie = function(exp, path){
     this.cookie = {
