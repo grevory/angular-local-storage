@@ -13,6 +13,9 @@ angularLocalStorage.provider('localStorageService', function(){
 
   this.prefix = 'ls';
 
+  // You could change web storage type localstorage or sessionStorage
+  this.storageType='localStorage';
+
   // Cookie options (usually in case of fallback)
   // expiry = Number of days before cookies expire // 0 = Does not expire
   // path = The web path the cookie represents
@@ -31,6 +34,11 @@ angularLocalStorage.provider('localStorageService', function(){
   this.setPrefix = function(prefix){
     this.prefix = prefix;
   };
+
+   // Setter for the storageType
+   this.setStorageType = function(storageType){
+       this.storageType = storageType;
+   };
 
   // Setter for cookie config
   this.setStorageCookie = function(exp, path){
@@ -59,6 +67,8 @@ angularLocalStorage.provider('localStorageService', function(){
     var prefix = this.prefix;
     var cookie = this.cookie;
     var notify = this.notify;
+    var storageType = this.storageType;
+    var webStorage = $window[storageType];
 
     // If there is a prefix set in the config lets use that with an appended period for readability
     if (prefix.substr(-1) !== '.') {
@@ -68,7 +78,7 @@ angularLocalStorage.provider('localStorageService', function(){
     // Checks the browser to see if local storage is supported
     var browserSupportsLocalStorage = (function () {
       try {
-        var supported = ('localStorage' in $window && $window['localStorage'] !== null);
+        var supported = (storageType in $window && $window[storageType] !== null);
 
         // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
         // is available, but trying to call .setItem throws an exception.
@@ -77,8 +87,8 @@ angularLocalStorage.provider('localStorageService', function(){
         // that exceeded the quota."
         var key = prefix + '__' + Math.round(Math.random() * 1e7);
         if (supported) {
-          localStorage.setItem(key, '');
-          localStorage.removeItem(key);
+          webStorage.setItem(key, '');
+          webStorage.removeItem(key);
         }
 
         return true;
@@ -111,9 +121,9 @@ angularLocalStorage.provider('localStorageService', function(){
         if (angular.isObject(value) || angular.isArray(value)) {
           value = angular.toJson(value);
         }
-        localStorage.setItem(prefix + key, value);
+        webStorage.setItem(prefix + key, value);
         if (notify.setItem) {
-          $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'localStorage'});
+          $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: this.storageType});
         }
       } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
@@ -131,7 +141,7 @@ angularLocalStorage.provider('localStorageService', function(){
         return getFromCookies(key);
       }
 
-      var item = localStorage.getItem(prefix + key);
+      var item = webStorage.getItem(prefix + key);
       // angular.toJson will convert null to 'null', so a proper conversion is needed
       // FIXME not a perfect solution, since a valid 'null' string can't be stored
       if (!item || item === 'null') {
@@ -157,9 +167,9 @@ angularLocalStorage.provider('localStorageService', function(){
       }
 
       try {
-        localStorage.removeItem(prefix+key);
+        webStorage.removeItem(prefix+key);
         if (notify.removeItem) {
-          $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'localStorage'});
+          $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: this.storageType});
         }
       } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
@@ -179,7 +189,7 @@ angularLocalStorage.provider('localStorageService', function(){
 
       var prefixLength = prefix.length;
       var keys = [];
-      for (var key in localStorage) {
+      for (var key in webStorage) {
         // Only return keys that are for this app
         if (key.substr(0,prefixLength) === prefix) {
           try {
@@ -211,7 +221,7 @@ angularLocalStorage.provider('localStorageService', function(){
 
       var prefixLength = prefix.length;
 
-      for (var key in localStorage) {
+      for (var key in webStorage) {
         // Only remove items that are for this app and match the regular expression
         if (testRegex.test(key)) {
           try {
