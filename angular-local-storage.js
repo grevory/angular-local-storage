@@ -40,6 +40,11 @@ angularLocalStorage.provider('localStorageService', function(){
     };
   };
 
+  // Setter for cookie domain
+  this.setStorageCookieDomain = function(domain){
+    this.cookie.domain = domain;
+  };
+
   // Setter for notification config
   // itemSet & itemRemove should be booleans
   this.setNotify = function(itemSet, itemRemove){
@@ -248,7 +253,8 @@ angularLocalStorage.provider('localStorageService', function(){
 
       try {
         var expiry = '',
-            expiryDate = new Date();
+            expiryDate = new Date(),
+            cookieDomain = '';
 
         if (value === null) {
           // Mark that the cookie has expired one day ago
@@ -260,8 +266,12 @@ angularLocalStorage.provider('localStorageService', function(){
           expiry = "; expires=" + expiryDate.toGMTString();
         }
         if (!!key) {
-          $document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + "; path="+cookie.path;
+          var cookiePath = "; path=" + cookie.path;
+          if(cookie.domain){
+            cookieDomain = "; domain=" + cookie.domain;
           }
+          $document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + cookiePath + cookieDomain;
+        }
       } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
         return false;
