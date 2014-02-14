@@ -1,6 +1,8 @@
 angular.module('demoModule', ['LocalStorageModule'])
 .config(['localStorageServiceProvider', function(localStorageServiceProvider){
   localStorageServiceProvider.setPrefix('demoPrefix');
+  // localStorageServiceProvider.setStorageCookieDomain('example.com');
+  // localStorageServiceProvider.setStorageType('sessionStorage');
 }])
 .controller('DemoCtrl', [
   '$scope',
@@ -15,6 +17,10 @@ angular.module('demoModule', ['LocalStorageModule'])
     });
 
     $scope.storageType = 'Local storage';
+
+    if (localStorageService.getStorageType().indexOf('session') >= 0) {
+      $scope.storageType = 'Session storage'
+    }
 
     if (!localStorageService.isSupported) {
       $scope.storageType = 'Cookie';
