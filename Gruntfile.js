@@ -7,6 +7,9 @@ module.exports = function(grunt) {
   // Time the grunt tasks
   require('time-grunt')(grunt);
 
+  // We need Karma
+  grunt.loadNpmTasks('grunt-karma');
+
   grunt.initConfig({
     karma: {
       options: {
