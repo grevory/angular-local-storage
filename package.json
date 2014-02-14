@@ -29,6 +29,7 @@
     "load-grunt-tasks": "~0.3.0",
     "grunt-contrib-jshint": "~0.8.0",
     "grunt": "~0.4.2",
-    "grunt-contrib-uglify": "~0.3.2"
+    "grunt-contrib-uglify": "~0.3.2",
+    "karma": "~0.8"
   }
 }
