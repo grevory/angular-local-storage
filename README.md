@@ -3,6 +3,8 @@ angular-local-storage
 
 An Angular module that gives you access to the browsers local storage
 
+[![Build Status](https://secure.travis-ci.org/username/reponame.png?branch=master)](https://travis-ci.org/username/reponame)
+
 Example use: 
 
 ```javascript
