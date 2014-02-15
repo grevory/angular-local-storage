@@ -70,6 +70,11 @@ angularLocalStorage.provider('localStorageService', function() {
     var storageType = this.storageType;
     var webStorage = $window[storageType];
 
+    // When Angular's $document is not available
+    if (!$document) {
+      $document = document;
+    }
+
     // If there is a prefix set in the config lets use that with an appended period for readability
     if (prefix.substr(-1) !== '.') {
       prefix = !!prefix ? prefix + '.' : '';
