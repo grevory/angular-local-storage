@@ -40,10 +40,10 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
 
     // web server port
-    port: 8080,
+    port: 8999,
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: true,
   });
 };

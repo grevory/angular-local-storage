@@ -16,7 +16,7 @@ module.exports = function(grunt) {
         ],
         configFile: 'test/karma.conf.js',
         reporters: ['dots'],
-        singleRun: false
+        singleRun: true
       },
       unit: {}
     },
@@ -29,9 +29,7 @@ module.exports = function(grunt) {
       },
       dev: {
         src: ['angular-local-storage.js'],
-        options: {
-          jshintrc: '.jshintrc',
-        }
+        options: {}
       },
       test: {
         src: ['test/spec/**/*.js'],

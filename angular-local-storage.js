@@ -215,10 +215,10 @@ angularLocalStorage.provider('localStorageService', function() {
     // Should be used mostly for development purposes
     var clearAllFromLocalStorage = function (regularExpression) {
 
-      var regularExpression = regularExpression || "";
+      regularExpression = regularExpression || "";
       //accounting for the '.' in the prefix when creating a regex
-      var tempPrefix = prefix.slice(0, -1) + "\.";
-      var testRegex = RegExp(tempPrefix + regularExpression);
+      var tempPrefix = prefix.slice(0, -1);
+      var testRegex = new RegExp(tempPrefix + '.' + regularExpression);
 
       if (!browserSupportsLocalStorage) {
         $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
@@ -357,7 +357,7 @@ angularLocalStorage.provider('localStorageService', function() {
         clearAll: clearAllFromCookies
       }
     };
-  }]
+  }];
 });
 }).call(this);
 
