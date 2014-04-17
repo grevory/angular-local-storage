@@ -346,7 +346,7 @@ angularLocalStorage.provider('localStorageService', function() {
       scope.$watchCollection(key, function(newVal) {
         addToLocalStorage(key, newVal);
       });
-    }
+    };
 
     return {
       isSupported: browserSupportsLocalStorage,
