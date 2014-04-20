@@ -12,7 +12,7 @@ angular.module('demoModule', ['LocalStorageModule'])
     localStorageService.clearAll();
 
     $scope.$watch('localStorageDemo', function(value){
-      localStorageService.add('localStorageDemo',value);
+      localStorageService.set('localStorageDemo',value);
       $scope.localStorageDemoValue = localStorageService.get('localStorageDemo');
     });
 
