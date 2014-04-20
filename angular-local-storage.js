@@ -340,6 +340,14 @@ angularLocalStorage.provider('localStorageService', function() {
       return storageType;
     };
 
+    var bindToScope = function(scope, key, def) {
+      scope[key] = getFromLocalStorage(key) || def;
+
+      scope.$watchCollection(key, function(newVal) {
+        addToLocalStorage(key, newVal);
+      });
+    };
+
     return {
       isSupported: browserSupportsLocalStorage,
       getStorageType: getStorageType,
@@ -349,6 +357,7 @@ angularLocalStorage.provider('localStorageService', function() {
       keys: getKeysForLocalStorage,
       remove: removeFromLocalStorage,
       clearAll: clearAllFromLocalStorage,
+      bind: bindToScope,
       cookie: {
         set: addToCookies,
         add: addToCookies, //DEPRECATED
