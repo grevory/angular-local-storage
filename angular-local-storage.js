@@ -341,7 +341,15 @@ angularLocalStorage.provider('localStorageService', function() {
     };
 
     var bindToScope = function(scope, key, def) {
-      scope[key] = getFromLocalStorage(key) || def;
+      var value = getFromLocalStorage(key);
+
+      if (value === null && angular.isDefined(def)) {
+        value = def;
+      } else if (angular.isObject(value) && angular.isObject(def)) {
+        value = angular.extend(def, value);
+      }
+
+      scope[key] = value;
 
       scope.$watchCollection(key, function(newVal) {
         addToLocalStorage(key, newVal);
