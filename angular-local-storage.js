@@ -96,7 +96,7 @@ angularLocalStorage.provider('localStorageService', function() {
           webStorage.removeItem(key);
         }
 
-        return true;
+        return supported;
       } catch (e) {
         storageType = 'cookie';
         $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
