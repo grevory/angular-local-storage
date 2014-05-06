@@ -9,46 +9,67 @@ describe('Tests functionality of the localStorage module', function() {
 
   beforeEach(inject(function(_localStorageService_) {
     ls = _localStorageService_;
-    spyOn(ls, 'get').andCallFake(function(key) {
-      if (store[key].charAt(0) === '{' || store[key].charAt(0) === '[') {
-        return angular.fromJson(store[key]);
-      } else {
-        return store[key];
-      }
-    });
-
-    spyOn(ls, 'set').andCallFake(function(key, val) {
-      if (angular.isObject(val) || angular.isArray(val)) {
-        val = angular.toJson(val);
-      }
-      if (angular.isNumber(val)){
-        val = val.toString();
-      }
-      store[key] = val;
-      return store[key];
-    });
-
-    spyOn(ls, 'clearAll').andCallFake(function() {
-      store = {};
-      return store;
-    });
   }));
 
-  it('Should add a value to my local storage', function() {
-    var n = 234;
-    ls.set('test', n);
-    //Since localStorage makes the value a string, we look for the '234' and not 234
-    expect(ls.get('test')).toBe('234');
+  it('A key should be derived to <prefix>.<key>', function() {
+    var key = "foo";
+    expect(ls.deriveKey(key)).toBe("ls." + key);
+  });
 
-    var obj = { key: 'val' };
-    ls.set('object', obj);
-    var res = ls.get('object');
+  it('Should be able to replace a key multiple times', function() {
+    var key = "foo",
+        expectedValues = [ "bar", "zoo", "aoo" ];
+
+    for (var expectedValue in expectedValues) {
+      ls.set(key, expectedValue);
+      expect(ls.get(key)).toBe(expectedValue);
+    }
+  });
+
+  it('Should delete a value from my local storage', function() {
+
+    var key = "foo",
+        expected_value = "bar";
+
+    ls.set(key, expected_value);
+    expect(ls.get(key)).toBe(expected_value);
+    expect(ls.remove(key)).toBe(true);
+    expect(ls.get(key)).toBe(null);
+
+  });
+
+  it('Should add a integer value to my local storage', function() {
+    var key = "test", 
+        expectedValue = 234;
+    ls.set(key, expectedValue);
+    //Since localStorage makes the value a string, we look for the '234' and not 234
+    expect(ls.get(key)).toBe(expectedValue.toString());
+  });
+
+  it('Should add a String value to my local storage', function() {
+    var key = "foo", 
+        expectedValue = "bar";
+    ls.set(key, expectedValue);
+    expect(ls.get(key)).toBe(expectedValue);
+  });
+
+  it('Should add a JSON value to my local storage', function() {
+    var key = "test", 
+        expectedValue = { key: 'val' };
+    ls.set(key, expectedValue);
+
+    var res = ls.get(key);
+    expect(res).toEqual(expectedValue);
     expect(res.key).toBe('val');
   });
 
   it('Should allow me to set a prefix', function() {
-    p.setPrefix('myPref');
-    expect(p.prefix).toBe('myPref');
+
+    var expectedPrefix = "myPref";
+
+    p.setPrefix(expectedPrefix);
+    expect(p.prefix).toBe(expectedPrefix);
+
   });
 
   it('Should allow me to set the cookie values', function() {
