@@ -9,6 +9,8 @@ describe('Tests functionality of the localStorage module', function() {
 
   beforeEach(inject(function(_localStorageService_) {
     ls = _localStorageService_;
+    ls.clearAll();
+    expect(ls.keys()).toEqual([]);
   }));
 
   it('A key should be derived to <prefix>.<key>', function() {
@@ -23,19 +25,21 @@ describe('Tests functionality of the localStorage module', function() {
     for (var expectedValue in expectedValues) {
       ls.set(key, expectedValue);
       expect(ls.get(key)).toBe(expectedValue);
+      expect(ls.keys()).toEqual([key]);
     }
   });
 
   it('Should delete a value from my local storage', function() {
-
     var key = "foo",
-        expected_value = "bar";
+        expectedValue = "bar";
 
-    ls.set(key, expected_value);
-    expect(ls.get(key)).toBe(expected_value);
+    ls.set(key, expectedValue);
+    expect(ls.get(key)).toBe(expectedValue);
+    expect(ls.keys()).toEqual([key]);
+
     expect(ls.remove(key)).toBe(true);
     expect(ls.get(key)).toBe(null);
-
+    expect(ls.keys()).toEqual([]);
   });
 
   it('Should add a integer value to my local storage', function() {
@@ -44,6 +48,7 @@ describe('Tests functionality of the localStorage module', function() {
     ls.set(key, expectedValue);
     //Since localStorage makes the value a string, we look for the '234' and not 234
     expect(ls.get(key)).toBe(expectedValue.toString());
+    expect(ls.keys()).toEqual([key]);
   });
 
   it('Should add a String value to my local storage', function() {
@@ -51,6 +56,7 @@ describe('Tests functionality of the localStorage module', function() {
         expectedValue = "bar";
     ls.set(key, expectedValue);
     expect(ls.get(key)).toBe(expectedValue);
+    expect(ls.keys()).toEqual([key]);
   });
 
   it('Should add a JSON value to my local storage', function() {
@@ -61,6 +67,7 @@ describe('Tests functionality of the localStorage module', function() {
     var res = ls.get(key);
     expect(res).toEqual(expectedValue);
     expect(res.key).toBe('val');
+    expect(ls.keys()).toEqual([key]);
   });
 
   it('Should allow me to set a prefix', function() {
