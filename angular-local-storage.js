@@ -62,6 +62,8 @@ angularLocalStorage.provider('localStorageService', function() {
     };
   };
 
+
+
   this.$get = ['$rootScope', '$window', '$document', function($rootScope, $window, $document) {
 
     var prefix = this.prefix;
@@ -79,7 +81,9 @@ angularLocalStorage.provider('localStorageService', function() {
     if (prefix.substr(-1) !== '.') {
       prefix = !!prefix ? prefix + '.' : '';
     }
-
+    var deriveQualifiedKey = function(key) {
+      return prefix + key;
+    }
     // Checks the browser to see if local storage is supported
     var browserSupportsLocalStorage = (function () {
       try {
@@ -90,7 +94,7 @@ angularLocalStorage.provider('localStorageService', function() {
         //
         // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage
         // that exceeded the quota."
-        var key = prefix + '__' + Math.round(Math.random() * 1e7);
+        var key = deriveQualifiedKey('__' + Math.round(Math.random() * 1e7));
         if (supported) {
           webStorage.setItem(key, '');
           webStorage.removeItem(key);
@@ -127,7 +131,7 @@ angularLocalStorage.provider('localStorageService', function() {
         if (angular.isObject(value) || angular.isArray(value)) {
           value = angular.toJson(value);
         }
-        webStorage.setItem(prefix + key, value);
+        webStorage.setItem(deriveQualifiedKey(key), value);
         if (notify.setItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: this.storageType});
         }
@@ -147,7 +151,7 @@ angularLocalStorage.provider('localStorageService', function() {
         return getFromCookies(key);
       }
 
-      var item = webStorage.getItem(prefix + key);
+      var item = webStorage.getItem(deriveQualifiedKey(key));
       // angular.toJson will convert null to 'null', so a proper conversion is needed
       // FIXME not a perfect solution, since a valid 'null' string can't be stored
       if (!item || item === 'null') {
@@ -173,7 +177,7 @@ angularLocalStorage.provider('localStorageService', function() {
       }
 
       try {
-        webStorage.removeItem(prefix+key);
+        webStorage.removeItem(deriveQualifiedKey(key));
         if (notify.removeItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: this.storageType});
         }
@@ -286,7 +290,7 @@ angularLocalStorage.provider('localStorageService', function() {
           if(cookie.domain){
             cookieDomain = "; domain=" + cookie.domain;
           }
-          $document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + cookiePath + cookieDomain;
+          $document.cookie = deriveQualifiedKey(key) + "=" + encodeURIComponent(value) + expiry + cookiePath + cookieDomain;
         }
       } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
@@ -309,7 +313,7 @@ angularLocalStorage.provider('localStorageService', function() {
         while (thisCookie.charAt(0) === ' ') {
           thisCookie = thisCookie.substring(1,thisCookie.length);
         }
-        if (thisCookie.indexOf(prefix + key + '=') === 0) {
+        if (thisCookie.indexOf(deriveQualifiedKey(key) + '=') === 0) {
           return decodeURIComponent(thisCookie.substring(prefix.length + key.length + 1, thisCookie.length));
         }
       }
@@ -366,6 +370,7 @@ angularLocalStorage.provider('localStorageService', function() {
       remove: removeFromLocalStorage,
       clearAll: clearAllFromLocalStorage,
       bind: bindToScope,
+      deriveKey: deriveQualifiedKey,
       cookie: {
         set: addToCookies,
         add: addToCookies, //DEPRECATED
