@@ -70,7 +70,7 @@ angularLocalStorage.provider('localStorageService', function() {
     var cookie = this.cookie;
     var notify = this.notify;
     var storageType = this.storageType;
-    var webStorage = $window[storageType];
+    var webStorage;
 
     // When Angular's $document is not available
     if (!$document) {
@@ -96,6 +96,7 @@ angularLocalStorage.provider('localStorageService', function() {
         // that exceeded the quota."
         var key = deriveQualifiedKey('__' + Math.round(Math.random() * 1e7));
         if (supported) {
+          webStorage = $window[storageType];
           webStorage.setItem(key, '');
           webStorage.removeItem(key);
         }
@@ -107,6 +108,8 @@ angularLocalStorage.provider('localStorageService', function() {
         return false;
       }
     }());
+    
+
 
     // Directly adds a value to local storage
     // If local storage is not available in the browser use cookies
@@ -131,7 +134,7 @@ angularLocalStorage.provider('localStorageService', function() {
         if (angular.isObject(value) || angular.isArray(value)) {
           value = angular.toJson(value);
         }
-        webStorage.setItem(deriveQualifiedKey(key), value);
+        if (webStorage) {webStorage.setItem(deriveQualifiedKey(key), value)};
         if (notify.setItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: this.storageType});
         }
@@ -151,7 +154,7 @@ angularLocalStorage.provider('localStorageService', function() {
         return getFromCookies(key);
       }
 
-      var item = webStorage.getItem(deriveQualifiedKey(key));
+      var item = webStorage ? webStorage.getItem(deriveQualifiedKey(key)) : null;
       // angular.toJson will convert null to 'null', so a proper conversion is needed
       // FIXME not a perfect solution, since a valid 'null' string can't be stored
       if (!item || item === 'null') {
