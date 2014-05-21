@@ -1,6 +1,6 @@
 {
   "name": "angular-local-storage",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "http://gregpike.net/demos/angular-local-storage/demo.html",
   "authors": [
     "grevory <greg@gregpike.ca>"
@@ -9,7 +9,11 @@
   "main": "angular-local-storage.js",
   "keywords": [
     "AngularJS",
-    "Local Storage"
+    "Angular",
+    "Storage",
+    "Local Storage",
+    "Session",
+    "Cookie"
   ],
   "license": "MIT",
   "ignore": [
