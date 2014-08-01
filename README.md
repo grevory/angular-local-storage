@@ -15,7 +15,12 @@ angular.module('yourModule', ['LocalStorageModule'])
   function($scope, localStorageService) {
     // Start fresh
     localStorageService.clearAll();
+    
+    // Set a key
     localStorageService.set('Favorite Sport','Ultimate Frisbee');
+    
+    // Delete a key
+    localStorageService.delete('Favorite Sport');
 }]);
 
 /*
