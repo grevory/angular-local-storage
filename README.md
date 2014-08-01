@@ -5,6 +5,12 @@ An Angular module that gives you access to the browsers local storage
 
 [![Build Status](https://secure.travis-ci.org/grevory/angular-local-storage.png?branch=master)](https://travis-ci.org/grevory/)
 
+Installation:
+
+```bash
+bower install angular-loading-bar
+```
+
 Example use: 
 
 ```javascript
