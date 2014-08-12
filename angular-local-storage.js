@@ -121,7 +121,7 @@ angularLocalStorage.provider('localStorageService', function() {
     var addToLocalStorage = function (key, value) {
 
       // If this browser does not support local storage use cookies
-      if (!browserSupportsLocalStorage) {
+      if (!browserSupportsLocalStorage || this.storageType === 'cookie') {
         $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
         if (notify.setItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'cookie'});
@@ -153,7 +153,7 @@ angularLocalStorage.provider('localStorageService', function() {
     // Example use: localStorageService.get('library'); // returns 'angular'
     var getFromLocalStorage = function (key) {
 
-      if (!browserSupportsLocalStorage) {
+      if (!browserSupportsLocalStorage || this.storageType === 'cookie') {
         $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
         return getFromCookies(key);
       }
