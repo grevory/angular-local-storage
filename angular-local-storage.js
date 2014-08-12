@@ -75,10 +75,6 @@ angularLocalStorage.provider('localStorageService', function() {
     // When Angular's $document is not available
     if (!$document) {
       $document = document;
-    } else {
-      // unwrapping the jquery encapsulated document to access cookies
-      // (see http://www.bennadel.com/blog/2630-accessing-document-properties-in-angularjs.htm)
-      $document = $document[0];
     }
 
     // If there is a prefix set in the config lets use that with an appended period for readability
