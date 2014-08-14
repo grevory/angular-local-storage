@@ -8,7 +8,7 @@ An Angular module that gives you access to the browsers local storage
 Installation:
 
 ```bash
-bower install angular-loading-bar
+bower install angular-local-storage
 ```
 
 Example use: 
