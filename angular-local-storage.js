@@ -75,6 +75,8 @@ angularLocalStorage.provider('localStorageService', function() {
     // When Angular's $document is not available
     if (!$document) {
       $document = document;
+    } else if ($document[0]) {
+      $document = $document[0];
     }
 
     // If there is a prefix set in the config lets use that with an appended period for readability
