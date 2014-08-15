@@ -1,5 +1,3 @@
-(function() {
-/* Start angularLocalStorage */
 'use strict';
 var angularLocalStorage = angular.module('LocalStorageModule', []);
 
@@ -386,5 +384,3 @@ angularLocalStorage.provider('localStorageService', function() {
     };
   }];
 });
-}).call(this);
-
