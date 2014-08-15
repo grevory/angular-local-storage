@@ -62,8 +62,6 @@ angularLocalStorage.provider('localStorageService', function() {
     };
   };
 
-
-
   this.$get = ['$rootScope', '$window', '$document', function($rootScope, $window, $document) {
     var self = this;
     var prefix = self.prefix;
@@ -120,7 +118,10 @@ angularLocalStorage.provider('localStorageService', function() {
 
       // If this browser does not support local storage use cookies
       if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
-        $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+        if (!browserSupportsLocalStorage) {
+            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+        }
+
         if (notify.setItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'cookie'});
         }
@@ -152,7 +153,10 @@ angularLocalStorage.provider('localStorageService', function() {
     var getFromLocalStorage = function (key) {
 
       if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
-        $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
+        if (!browserSupportsLocalStorage) {
+          $rootScope.$broadcast('LocalStorageModule.notification.warning','LOCAL_STORAGE_NOT_SUPPORTED');
+        }
+
         return getFromCookies(key);
       }
 
@@ -173,8 +177,11 @@ angularLocalStorage.provider('localStorageService', function() {
     // Remove an item from local storage
     // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
     var removeFromLocalStorage = function (key) {
-      if (!browserSupportsLocalStorage) {
-        $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+      if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
+        if (!browserSupportsLocalStorage) {
+          $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+        }
+
         if (notify.removeItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'cookie'});
         }
@@ -229,8 +236,11 @@ angularLocalStorage.provider('localStorageService', function() {
       var tempPrefix = prefix.slice(0, -1);
       var testRegex = new RegExp(tempPrefix + '.' + regularExpression);
 
-      if (!browserSupportsLocalStorage) {
-        $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+      if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
+        if (!browserSupportsLocalStorage) {
+          $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+        }
+
         return clearAllFromCookies();
       }
 
