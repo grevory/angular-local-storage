@@ -8,6 +8,41 @@ module.exports = function(grunt) {
   require('time-grunt')(grunt);
 
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    meta: {
+      banner: [
+        '/**',
+        ' * <%= pkg.description %>',
+        ' * @version v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>',
+        ' * @link <%= pkg.homepage %>',
+        ' * @author <%= pkg.author %>',
+        ' * @license MIT License, http://www.opensource.org/licenses/MIT',
+        ' */'
+      ].join('\n')
+    },
+    dirs: {
+      dest: 'dist'
+    },
+    concat: {
+      options: {
+        banner: '<%= meta.banner %>' + '\n' +
+          '(function ( window, angular, undefined ) {' + '\n',
+        footer: '})( window, window.angular );'
+      },
+      dist: {
+        src: ['src/*.js'],
+        dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
+      }
+    },
+    uglify: {
+      options: {
+        banner: '<%= meta.banner %>'
+      },
+      dist: {
+        src: ['<%= concat.dist.dest %>'],
+        dest: '<%= dirs.dest %>/<%= pkg.name %>.min.js'
+      }
+    },
     karma: {
       options: {
         autowatch: true,
@@ -37,13 +72,6 @@ module.exports = function(grunt) {
           jshintrc: 'test/.jshintrc',
         }
       }
-    },
-    uglify: {
-      dist: {
-        files: {
-          'angular-local-storage.min.js': 'angular-local-storage.js'
-        }
-      }
     }
   });
 
@@ -57,6 +85,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('dist', [
+    'concat',
     'uglify'
   ]);
 };
