@@ -11,7 +11,7 @@ Installation:
 bower install angular-local-storage
 ```
 
-Example use: 
+Example use:
 
 ```javascript
 angular.module('yourModule', ['LocalStorageModule'])
@@ -21,16 +21,16 @@ angular.module('yourModule', ['LocalStorageModule'])
   function($scope, localStorageService) {
     // Start fresh
     localStorageService.clearAll();
-    
+
     // Set a key
     localStorageService.set('Favorite Sport','Ultimate Frisbee');
-    
+
     // Delete a key
-    localStorageService.delete('Favorite Sport');
+    localStorageService.remove('Favorite Sport');
 }]);
 
 /*
-To set the prefix of your localStorage name, you can use the setPrefix method 
+To set the prefix of your localStorage name, you can use the setPrefix method
 available on the localStorageServiceProvider
 */
 angular.module('yourModule', ['LocalStorageModule'])
