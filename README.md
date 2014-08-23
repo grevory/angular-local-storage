@@ -11,7 +11,7 @@ Installation:
 bower install angular-local-storage
 ```
 
-Example use: 
+Example use:
 
 ```javascript
 angular.module('yourModule', ['LocalStorageModule'])
@@ -21,16 +21,16 @@ angular.module('yourModule', ['LocalStorageModule'])
   function($scope, localStorageService) {
     // Start fresh
     localStorageService.clearAll();
-    
+
     // Set a key
     localStorageService.set('Favorite Sport','Ultimate Frisbee');
-    
+
     // Delete a key
     localStorageService.delete('Favorite Sport');
 }]);
 
 /*
-To set the prefix of your localStorage name, you can use the setPrefix method 
+To set the prefix of your localStorage name, you can use the setPrefix method
 available on the localStorageServiceProvider
 */
 angular.module('yourModule', ['LocalStorageModule'])
@@ -40,16 +40,16 @@ angular.module('yourModule', ['LocalStorageModule'])
 ```
 
 #### How to bind to a $scope variable:
-Usage: localStorageService.bind(scope, key, def);
+Usage: localStorageService.bind(scope, scopeKey, def, lsKey);
 ```
 // Example
 $scope.anArtist = {'firstname':'Pablo', 'lastname':'Picasso'};
 
 // Bind to local storage service
-localStorageService.bind($scope, 'anArtist', anArtist);
+localStorageService.bind($scope, 'anArtist', $scope.anArtist, 'specialArtist');
 
 // get bound data:
-console.log(localStorageService.get('anArtist'));
+console.log(localStorageService.get('specialArtist'));
 ```
 
 Check out the full demo and documentation at http://gregpike.net/demos/angular-local-storage/demo.html
