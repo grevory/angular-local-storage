@@ -236,6 +236,19 @@ describe('localStorageService', function() {
     expect($rootScope.property).toEqual(localStorageService.get('property'));
   }));
 
+  it('should be able to bind to properties of objects', inject(function($rootScope, localStorageService) {
+
+    localStorageService.set('obj.property', 'oldValue');
+    localStorageService.bind($rootScope, 'obj.property');
+
+    expect($rootScope.obj.property).toEqual(localStorageService.get('obj.property'));
+
+    $rootScope.obj.property = 'newValue';
+    $rootScope.$digest();
+
+    expect($rootScope.obj.property).toEqual(localStorageService.get('obj.property'));
+  }));
+
   //sessionStorage
   describe('SessionStorage', function() {
 

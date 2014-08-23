@@ -62,7 +62,7 @@ angularLocalStorage.provider('localStorageService', function() {
     };
   };
 
-  this.$get = ['$rootScope', '$window', '$document', function($rootScope, $window, $document) {
+  this.$get = ['$rootScope', '$window', '$document', '$parse', function($rootScope, $window, $document, $parse) {
     var self = this;
     var prefix = self.prefix;
     var cookie = self.cookie;
@@ -368,7 +368,7 @@ angularLocalStorage.provider('localStorageService', function() {
         value = angular.extend(def, value);
       }
 
-      scope[key] = value;
+      $parse(key).assign(scope, value);
 
       scope.$watchCollection(key, function(newVal) {
         addToLocalStorage(key, newVal);
