@@ -359,8 +359,12 @@ angularLocalStorage.provider('localStorageService', function() {
       return storageType;
     };
 
-    var bindToScope = function(scope, key, def) {
-      var value = getFromLocalStorage(key);
+    var bindToScope = function(scope, scopeKey, def, lsKey) {
+      if (!lsKey) {
+        lsKey = scopeKey;
+      }
+
+      var value = getFromLocalStorage(lsKey);
 
       if (value === null && angular.isDefined(def)) {
         value = def;
@@ -368,10 +372,10 @@ angularLocalStorage.provider('localStorageService', function() {
         value = angular.extend(def, value);
       }
 
-      $parse(key).assign(scope, value);
+      $parse(scopeKey).assign(scope, value);
 
-      scope.$watchCollection(key, function(newVal) {
-        addToLocalStorage(key, newVal);
+      scope.$watchCollection(scopeKey, function(newVal) {
+        addToLocalStorage(lsKey, newVal);
       });
     };
 

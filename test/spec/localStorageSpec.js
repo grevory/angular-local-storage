@@ -249,6 +249,19 @@ describe('localStorageService', function() {
     expect($rootScope.obj.property).toEqual(localStorageService.get('obj.property'));
   }));
 
+  it('should be able to bind to scope using different key', inject(function($rootScope, localStorageService) {
+
+    localStorageService.set('lsProperty', 'oldValue');
+    localStorageService.bind($rootScope, 'property', undefined, 'lsProperty');
+
+    expect($rootScope.property).toEqual(localStorageService.get('lsProperty'));
+
+    $rootScope.property = 'newValue';
+    $rootScope.$digest();
+
+    expect($rootScope.property).toEqual(localStorageService.get('lsProperty'));
+  }));
+
   //sessionStorage
   describe('SessionStorage', function() {
 
