@@ -16,6 +16,13 @@ describe('localStorageService', function() {
       },
       removeItem: function(key) {
         delete keys[key];
+      },
+      get length() {
+        return Object.keys(keys).length;
+      },
+      key: function(i) {
+        var aKeys = Object.keys(keys);
+        return aKeys[i] || null;
       }
     };
   }
@@ -262,6 +269,17 @@ describe('localStorageService', function() {
     $rootScope.$digest();
 
     expect($rootScope.property).toEqual(localStorageService.get('lsProperty'));
+  }));
+
+  it('should be able to return it\'s owned keys amount', inject(
+    function(localStorageService, $window) {
+
+      for(var i = 0; i < 10; i++) {
+        localStorageService.set('key' + i, 'val' + i);
+        $window.localStorage.setItem('key' + i, 'val' + i);
+      }
+      expect(localStorageService.length()).toEqual(10);
+      expect($window.localStorage.length).toEqual(20);
   }));
 
   //sessionStorage
