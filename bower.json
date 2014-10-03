@@ -1,6 +1,6 @@
 {
   "name": "angular-local-storage",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "homepage": "http://gregpike.net/demos/angular-local-storage/demo.html",
   "authors": [
     "grevory <greg@gregpike.ca>"
@@ -17,12 +17,12 @@
   ],
   "license": "MIT",
   "ignore": [
-    "**/.*",
+    "src",
     "node_modules",
     "bower_components",
     "test",
     "tests",
-    "package.json"
+    "Gruntfile.js"
   ],
   "devDependencies": {
     "angularjs": "*",
