@@ -115,6 +115,12 @@ angularLocalStorage.provider('localStorageService', function() {
     // If local storage is not available in the browser use cookies
     // Example use: localStorageService.add('library','angular');
     var addToLocalStorage = function (key, value) {
+      // Let's convert undefined values to null to get the value consistent
+      if (typeof value === "undefined") {
+        value = null;
+      }else if (angular.isObject(value) || angular.isArray(value)) {
+        value = angular.toJson(value);
+      }
 
       // If this browser does not support local storage use cookies
       if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
@@ -126,11 +132,6 @@ angularLocalStorage.provider('localStorageService', function() {
           $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'cookie'});
         }
         return addToCookies(key, value);
-      }
-
-      // Let's convert undefined values to null to get the value consistent
-      if (typeof value === "undefined") {
-        value = null;
       }
 
       try {
@@ -329,7 +330,13 @@ angularLocalStorage.provider('localStorageService', function() {
           thisCookie = thisCookie.substring(1,thisCookie.length);
         }
         if (thisCookie.indexOf(deriveQualifiedKey(key) + '=') === 0) {
-          return decodeURIComponent(thisCookie.substring(prefix.length + key.length + 1, thisCookie.length));
+          var storedValues = decodeURIComponent(thisCookie.substring(prefix.length + key.length + 1, thisCookie.length))
+          try{
+            var obj = JSON.parse(storedValues)
+            return angular.fromJson(obj)
+          }catch(e){
+            return storedValues
+          }
         }
       }
       return null;
@@ -401,4 +408,3 @@ angularLocalStorage.provider('localStorageService', function() {
   }];
 });
 }).call(this);
-
