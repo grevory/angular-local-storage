@@ -386,6 +386,16 @@ angularLocalStorage.provider('localStorageService', function() {
       });
     };
 
+    var lengthToLocalStorage = function() {
+      var cant = 0;
+      for(var iIndex=0; iIndex<localStorage.length; iIndex++){
+        if( localStorage.key(iIndex).contains(prefix) && localStorage.key(iIndex).indexOf(prefix) === 0 ){
+          cant++;
+        }
+      }
+      return cant;
+    };
+
     return {
       isSupported: browserSupportsLocalStorage,
       getStorageType: getStorageType,
@@ -397,6 +407,7 @@ angularLocalStorage.provider('localStorageService', function() {
       clearAll: clearAllFromLocalStorage,
       bind: bindToScope,
       deriveKey: deriveQualifiedKey,
+      length: lengthToLocalStorage,
       cookie: {
         set: addToCookies,
         add: addToCookies, //DEPRECATED
