@@ -40,16 +40,16 @@ angular.module('yourModule', ['LocalStorageModule'])
 ```
 
 #### How to bind to a $scope variable:
-Usage: localStorageService.bind(scope, key, def);
+Usage: localStorageService.bind(scope, scopeKey, def, lsKey);
 ```
 // Example
 $scope.anArtist = {'firstname':'Pablo', 'lastname':'Picasso'};
 
 // Bind to local storage service
-localStorageService.bind($scope, 'anArtist', anArtist);
+localStorageService.bind($scope, 'anArtist', $scope.anArtist, 'specialArtist');
 
 // get bound data:
-console.log(localStorageService.get('anArtist'));
+console.log(localStorageService.get('specialArtist'));
 ```
 
 Check out the full demo and documentation at http://gregpike.net/demos/angular-local-storage/demo.html
