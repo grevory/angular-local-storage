@@ -6,7 +6,7 @@
     "grevory <greg@gregpike.ca>"
   ],
   "description": "An Angular module that gives you access to the browser's local storage",
-  "main": "angular-local-storage.js",
+  "main": "./dist/angular-local-storage.js",
   "keywords": [
     "AngularJS",
     "Angular",
