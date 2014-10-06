@@ -188,6 +188,38 @@ describe('localStorageService', function() {
     );
   });
 
+  it('should be able to set and get integers', function() {
+    inject(
+      addItem('key', 777),
+      expectAdding('ls.key', angular.toJson(777)),
+      expectMatching('key', 777)
+    );
+  });
+
+  it('should be able to set and get float numbers', function() {
+    inject(
+      addItem('key', 123.123),
+      expectAdding('ls.key', angular.toJson(123.123)),
+      expectMatching('key', 123.123)
+    );
+  });
+
+  it('should be able to set and get strings', function() {
+    inject(
+      addItem('key', 'string'),
+      expectAdding('ls.key', 'string'),
+      expectMatching('key', 'string')
+    );
+  });
+
+  it('should be able to set and get numbers as a strings', function() {
+    inject(
+      addItem('key', '777'),
+      expectAdding('ls.key', angular.toJson('777')),
+      expectMatching('key', '777')
+    )
+  });
+
   it('should be able to get items', inject(
     getItem('key'),
     expectGetting('ls.key')

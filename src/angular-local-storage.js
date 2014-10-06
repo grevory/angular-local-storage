@@ -118,7 +118,7 @@ angularLocalStorage.provider('localStorageService', function() {
       // Let's convert undefined values to null to get the value consistent
       if (typeof value === "undefined") {
         value = null;
-      } else if (angular.isObject(value) || angular.isArray(value) || angular.isNumber(value)) {
+      } else if (angular.isObject(value) || angular.isArray(value) || angular.isNumber(+value || value)) {
         value = angular.toJson(value);
       }
 
@@ -168,12 +168,18 @@ angularLocalStorage.provider('localStorageService', function() {
         return null;
       }
 
-      if (item.charAt(0) === "{" || item.charAt(0) === "[" || angular.isNumber(+item || item)) {
+      if (item.charAt(0) === "{" || item.charAt(0) === "[" || isStringNumber(item)) {
         return angular.fromJson(item);
       }
 
       return item;
     };
+
+    // Test if string is only contains numbers
+    // e.g '1' => true, "'1'" => true
+    function isStringNumber(num) {
+      return  /^-?\d+\.?\d*$/.test(num.replace(/["']/g, ''));
+    }
 
     // Remove an item from local storage
     // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
