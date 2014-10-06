@@ -1,11 +1,11 @@
 angular-local-storage
 =====================
 
-An Angular module that gives you access to the browsers local storage
+An Angular module that gives you access to the browsers local storage, **v0.1.1**
 
 [![Build Status](https://secure.travis-ci.org/grevory/angular-local-storage.png?branch=master)](https://travis-ci.org/grevory/)
 
-Installation:
+##Installation:
 
 ```bash
 bower install angular-local-storage
@@ -54,7 +54,26 @@ console.log(localStorageService.get('specialArtist'));
 
 Check out the full demo and documentation at http://gregpike.net/demos/angular-local-storage/demo.html
 
-To do:
-- Add tests
+##TO DO:
 - Expand Readme
+
+##Development:
+Clone the project: 
+```bash
+$ git clone https://github.com/<your-repo>/angular-local-storage.git
+$ npm install
+$ bower install
+```
+Run the tests:
+```bash
+$ grunt test
+```
+**Deploy:**<br/>
+Run the build task, update version before(bower,package)
+```bash
+$ grunt build
+$ git tag 0.*.*
+$ git push origin master --tags
+```
+
 
