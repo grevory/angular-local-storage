@@ -71,7 +71,7 @@ $ grunt test
 **Deploy:**<br/>
 Run the build task, update version before(bower,package)
 ```bash
-$ grunt build
+$ grunt dist
 $ git tag 0.*.*
 $ git push origin master --tags
 ```
