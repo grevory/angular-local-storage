@@ -30,7 +30,7 @@ module.exports = function(grunt) {
         footer: '})( window, window.angular );'
       },
       dist: {
-        src: ['src/*.js'],
+        src: ['src/common.js', 'src/angular-local-storage.js'],
         dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
       }
     },

@@ -1,4 +1,3 @@
-'use strict';
 var angularLocalStorage = angular.module('LocalStorageModule', []);
 
 angularLocalStorage.provider('localStorageService', function() {
@@ -114,10 +113,10 @@ angularLocalStorage.provider('localStorageService', function() {
     // Example use: localStorageService.add('library','angular');
     var addToLocalStorage = function (key, value) {
       // Let's convert undefined values to null to get the value consistent
-      if (typeof value === "undefined") {
+      if (isUndefined(value)) {
         value = null;
-      } else if (angular.isObject(value) || angular.isArray(value) || angular.isNumber(+value || value)) {
-        value = angular.toJson(value);
+      } else if (isObject(value) || isArray(value) || isNumber(+value || value)) {
+        value = toJson(value);
       }
 
       // If this browser does not support local storage use cookies
@@ -133,8 +132,8 @@ angularLocalStorage.provider('localStorageService', function() {
       }
 
       try {
-        if (angular.isObject(value) || angular.isArray(value)) {
-          value = angular.toJson(value);
+        if (isObject(value) || isArray(value)) {
+          value = toJson(value);
         }
         if (webStorage) {webStorage.setItem(deriveQualifiedKey(key), value)};
         if (notify.setItem) {
@@ -167,17 +166,11 @@ angularLocalStorage.provider('localStorageService', function() {
       }
 
       if (item.charAt(0) === "{" || item.charAt(0) === "[" || isStringNumber(item)) {
-        return angular.fromJson(item);
+        return fromJson(item);
       }
 
       return item;
     };
-
-    // Test if string is only contains numbers
-    // e.g '1' => true, "'1'" => true
-    function isStringNumber(num) {
-      return  /^-?\d+\.?\d*$/.test(num.replace(/["']/g, ''));
-    }
 
     // Remove an item from local storage
     // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
@@ -282,10 +275,10 @@ angularLocalStorage.provider('localStorageService', function() {
     // Example use: localStorageService.cookie.add('library','angular');
     var addToCookies = function (key, value) {
 
-      if (typeof value === "undefined") {
+      if (isUndefined(value)) {
         return false;
-      } else if(angular.isArray(value) || angular.isObject(value)) {
-        value = angular.toJson(value);
+      } else if(isArray(value) || isObject(value)) {
+        value = toJson(value);
       }
 
       if (!browserSupportsCookies()) {
@@ -338,8 +331,8 @@ angularLocalStorage.provider('localStorageService', function() {
         if (thisCookie.indexOf(deriveQualifiedKey(key) + '=') === 0) {
           var storedValues = decodeURIComponent(thisCookie.substring(prefix.length + key.length + 1, thisCookie.length))
           try{
-            var obj = JSON.parse(storedValues)
-            return angular.fromJson(obj)
+            var obj = JSON.parse(storedValues);
+            return fromJson(obj)
           }catch(e){
             return storedValues
           }
@@ -379,10 +372,10 @@ angularLocalStorage.provider('localStorageService', function() {
 
       var value = getFromLocalStorage(lsKey);
 
-      if (value === null && angular.isDefined(def)) {
+      if (value === null && isDefined(def)) {
         value = def;
-      } else if (angular.isObject(value) && angular.isObject(def)) {
-        value = angular.extend(def, value);
+      } else if (isObject(value) && isObject(def)) {
+        value = extend(def, value);
       }
 
       $parse(scopeKey).assign(scope, value);
