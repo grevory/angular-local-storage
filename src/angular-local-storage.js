@@ -118,7 +118,7 @@ angularLocalStorage.provider('localStorageService', function() {
       // Let's convert undefined values to null to get the value consistent
       if (typeof value === "undefined") {
         value = null;
-      }else if (angular.isObject(value) || angular.isArray(value)) {
+      } else if (angular.isObject(value) || angular.isArray(value) || angular.isNumber(value)) {
         value = angular.toJson(value);
       }
 
@@ -168,7 +168,7 @@ angularLocalStorage.provider('localStorageService', function() {
         return null;
       }
 
-      if (item.charAt(0) === "{" || item.charAt(0) === "[") {
+      if (item.charAt(0) === "{" || item.charAt(0) === "[" || angular.isNumber(+item || item)) {
         return angular.fromJson(item);
       }
 
