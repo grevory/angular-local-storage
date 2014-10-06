@@ -1,5 +1,3 @@
-(function() {
-/* Start angularLocalStorage */
 'use strict';
 var angularLocalStorage = angular.module('LocalStorageModule', []);
 
@@ -286,6 +284,8 @@ angularLocalStorage.provider('localStorageService', function() {
 
       if (typeof value === "undefined") {
         return false;
+      } else if(angular.isArray(value) || angular.isObject(value)) {
+        value = angular.toJson(value);
       }
 
       if (!browserSupportsCookies()) {
@@ -427,4 +427,3 @@ angularLocalStorage.provider('localStorageService', function() {
     };
   }];
 });
-}).call(this);
