@@ -400,6 +400,24 @@ describe('localStorageService', function() {
       expect(localStorageService.get('cookieKey')).toEqual('');
     }));
 
+    it('should be able to set and get objects from cookie', inject(function(localStorageService) {
+      //use as a fallback
+      localStorageService.set('cookieKey', { a: { b: 1 } });
+      expect(localStorageService.get('cookieKey')).toEqual({ a: { b: 1 } });
+      //use directly
+      localStorageService.cookie.set('cookieKey', { a: 2 });
+      expect(localStorageService.cookie.get('cookieKey')).toEqual({ a: 2 });
+    }));
+
+    it('should be able to set and get arrays from cookie', inject(function(localStorageService) {
+      //use as a fallback
+      localStorageService.set('cookieKey', [1, 2, 3, [ 1, 2, 3 ]]);
+      expect(localStorageService.get('cookieKey')).toEqual([1, 2, 3, [ 1, 2, 3 ]]);
+      //use directly
+      localStorageService.cookie.set('cookieKey', ['foo', 'bar']);
+      expect(localStorageService.cookie.get('cookieKey')).toEqual(['foo', 'bar']);
+    }));
+
     Date.prototype.addDays = function(days) {
       var date = new Date(this.getTime());
       date.setDate(date.getDate() + days);
