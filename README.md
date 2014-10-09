@@ -26,10 +26,10 @@ An Angular module that gives you access to the browsers local storage, **v0.1.1*
  - [deriveKey](#derivekey)
  - [length](#length)
  - [cookie](#cookie)
-   - [set](#cookieset)
-   - [get](#cookieget)
-   - [remove](#cookieremove)
-   - [clearAll](#cookieclearall)
+    - [set](#cookieset)
+    - [get](#cookieget)
+    - [remove](#cookieremove)
+    - [clearAll](#cookieclearall)
 
 ##Get Started
 **(1)** You can install angular-local-storage using 2 different ways:<br/>
