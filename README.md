@@ -13,6 +13,14 @@ An Angular module that gives you access to the browsers local storage, **v0.1.1*
  - [setStorageCookieDomain](#setstoragecookiedomain)
  - [setNotify](#setnotify)
  - [Example](#configuration-example)
+- [API Documentation](#api-documentation)
+ - [isSupported](#issupported)
+ - [getStorageType](#getstoragetype)
+ - [set](#set)
+ - [get](#get)
+ - [keys](#keys)
+ - [remove](#remove)
+ - [clearAll](#clearall)
 
 ##Configuration
 ###setPrefix
@@ -72,6 +80,94 @@ myApp.config(function (localStorageServiceProvider) {
     .setNotify(true, true)
 });
 ```
+##API Documentation
+##isSupported
+Checks if the browser support the current storage type(e.g: `localStorage`, `sessionStorage`).
+**Returns:** `Boolean`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  if(localStorageService.isSupported()) {
+    //...
+  }
+  //...
+});
+```
+###getStorageType
+**Returns:** `String`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  var storageType = localStorageService.getStorageType(); //e.g localStorage
+  //...
+});
+```
+###set
+Directly adds a value to local storage.<br/>
+If local storage is not supported, use cookies instead.<br/>
+**Returns:** `Boolean`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  function submit(key, val) {
+   return localStorageService.set(key, value);
+  }
+  //...
+});
+```
+###get
+Directly get a value from local storage.<br/>
+If local storage is not supported, use cookies instead.<br/>
+**Returns:** `value from local storage`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  function getItem(key) {
+   return localStorageService.get(key);
+  }
+  //...
+});
+```
+###keys
+Return array of keys for local storage, ignore keys that not owned.
+**Returns:** `value from local storage`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  var lsKeys = localStorageService.keys();
+  //...
+});
+```
+###remove
+Remove an item from local storage by key.<br/>
+If local storage is not supported, use cookies instead.<br/>
+**Returns:** `Boolean`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  function removeItem(key) {
+   return localStorageService.remove(key);
+  }
+  //...
+});
+```
+###clearAll
+Remove all data for this app from local storage.<br/>
+If local storage is not supported, use cookies instead.<br/>
+**Note:** Optionally takes a regular expression string and removes matching.<br/>
+**Returns:** `Boolean`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  function clearNumbers(key) {
+   return localStorageService.clearAll(/^\d+$/);
+  }
+  
+  function clearAll() {
+   return localStorageService.clearAll();
+  }
+  //...
+});
 
 ##Installation:
 
