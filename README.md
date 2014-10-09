@@ -46,10 +46,13 @@ Usage: localStorageService.bind(scope, scopeKey, def, lsKey);
 $scope.anArtist = {'firstname':'Pablo', 'lastname':'Picasso'};
 
 // Bind to local storage service
-localStorageService.bind($scope, 'anArtist', $scope.anArtist, 'specialArtist');
+var lsUnbind = localStorageService.bind($scope, 'anArtist', $scope.anArtist, 'specialArtist');
 
 // get bound data:
 console.log(localStorageService.get('specialArtist'));
+
+// Remove binding. Clears $watch on scopeKey:
+lsUnbind();
 ```
 
 Check out the full demo and documentation at http://gregpike.net/demos/angular-local-storage/demo.html
