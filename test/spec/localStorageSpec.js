@@ -277,6 +277,23 @@ describe('localStorageService', function() {
     expect($rootScope.property).toEqual(localStorageService.get('property'));
   }));
 
+  it('should be able to unbind from scope variable', inject(function($rootScope, localStorageService) {
+
+    localStorageService.set('property', 'oldValue');
+    var lsUnbind = localStorageService.bind($rootScope, 'property');
+
+    $rootScope.property = 'newValue';
+    $rootScope.$digest();
+
+    expect($rootScope.property).toEqual(localStorageService.get('property'));
+
+    lsUnbind();
+    $rootScope.property = 'anotherValue';
+    $rootScope.$digest();
+
+    expect($rootScope.property).not.toEqual(localStorageService.get('property'));
+  }));
+
   it('should be able to bind to properties of objects', inject(function($rootScope, localStorageService) {
 
     localStorageService.set('obj.property', 'oldValue');
