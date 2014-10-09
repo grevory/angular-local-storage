@@ -5,10 +5,35 @@ An Angular module that gives you access to the browsers local storage, **v0.1.1*
 
 [![Build Status](https://secure.travis-ci.org/grevory/angular-local-storage.png?branch=master)](https://travis-ci.org/grevory/)
 
+##Table of contents:
+- [Configuration](#configuration)
+ - [setPrefix](#setprefix)
+ - [setStorageType](setstoragetype)
+
+##Configuration
+###setPrefix
+You could set a prefix to avoid overwriting any local storage variables from the rest of your app<br/>
+**Default prefix:** `ls.<your-key>`
+```js
+myApp.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setPrefix('yourAppName');
+});
+```
+###setStorageType
+You could change web storage type to localStorage or sessionStorage<br/>
+**Default storage:** `localStorage`
+```js
+myApp.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setStorageType('sessionStorage');
+});
+```
+
 ##Installation:
 
 ```bash
-bower install angular-local-storage
+$ bower install angular-local-storage
 ```
 
 Example use:
