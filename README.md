@@ -21,6 +21,9 @@ An Angular module that gives you access to the browsers local storage, **v0.1.1*
  - [keys](#keys)
  - [remove](#remove)
  - [clearAll](#clearall)
+ - [bind](#bind)
+ - [deriveKey](#derivekey)
+ - [length](#length)
 
 ##Configuration
 ###setPrefix
@@ -162,10 +165,45 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   function clearNumbers(key) {
    return localStorageService.clearAll(/^\d+$/);
   }
-  
+  //...
   function clearAll() {
    return localStorageService.clearAll();
   }
+});
+```
+###bind
+Bind $scope key to localStorageService.
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  localStorageService.set('property', 'oldValue');
+  localStorageService.bind($rootScope, 'property');
+  
+  //Test Changes
+  $rootScope.property = 'newValue';
+  console.log(localStorageService.get('property')) // newValue;
+  //...
+});
+```
+###deriveKey
+Return the derive key
+**Returns** `String`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  localStorageService.set('property', 'oldValue');
+  //Test Result
+  console.log(localStorageService.deriveKey('property')); // ls.property
+  //...
+});
+```
+###length
+Return localStorageService.length, ignore keys that not owned.
+**Returns** `Number`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  var lsLength = localStorageService.length(); // e.g: 7
   //...
 });
 ```
