@@ -8,7 +8,11 @@ An Angular module that gives you access to the browsers local storage, **v0.1.1*
 ##Table of contents:
 - [Configuration](#configuration)
  - [setPrefix](#setprefix)
- - [setStorageType](setstoragetype)
+ - [setStorageType](#setstoragetype)
+ - [setStorageCookie](#setstoragecookie)
+ - [setStorageCookieDomain](#setstoragecookiedomain)
+ - [setNotify](#setnotify)
+ - [Example](#configuration-example)
 
 ##Configuration
 ###setPrefix
@@ -27,6 +31,45 @@ You could change web storage type to localStorage or sessionStorage<br/>
 myApp.config(function (localStorageServiceProvider) {
   localStorageServiceProvider
     .setStorageType('sessionStorage');
+});
+```
+###setStorageCookie
+Set cookie options (usually in case of fallback)<br/>
+**expiry:** number of days before cookies expire (0 = does not expire). **default:** `30`<br/>
+**path:** the web path the cookie represents. **default:** `'/'`
+```js
+myApp.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setStorageCookie(45, '<path>');
+});
+```
+###setStorageCookieDomain
+Set for cookie domain<br/>
+**No default value**
+```js
+myApp.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setStorageCookieDomain('<domain>');
+});
+```
+###setNotify
+Send signals for each of the following actions:<br/>
+**setItem** , default: `true`<br/>
+**removeItem** , default: `false`
+```js
+myApp.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setNotify(true, true);
+});
+```
+###Configuration Example
+Using all together
+```js
+myApp.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setPrefix('myApp')
+    .setStorageType('sessionStorage')
+    .setNotify(true, true)
 });
 ```
 
