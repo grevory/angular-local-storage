@@ -220,10 +220,10 @@ Bind $scope key to localStorageService.
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   localStorageService.set('property', 'oldValue');
-  localStorageService.bind($rootScope, 'property');
+  localStorageService.bind($scope, 'property');
   
   //Test Changes
-  $rootScope.property = 'newValue';
+  $scope.property = 'newValue';
   console.log(localStorageService.get('property')) // newValue;
   //...
 });
