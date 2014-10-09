@@ -168,6 +168,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   }
   //...
 });
+```
 
 ##Installation:
 
