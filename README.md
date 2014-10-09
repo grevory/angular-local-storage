@@ -6,6 +6,7 @@ An Angular module that gives you access to the browsers local storage, **v0.1.1*
 [![Build Status](https://secure.travis-ci.org/grevory/angular-local-storage.png?branch=master)](https://travis-ci.org/grevory/)
 
 ##Table of contents:
+- [Get Started](#get-started)
 - [Configuration](#configuration)
  - [setPrefix](#setprefix)
  - [setStorageType](#setstoragetype)
@@ -24,7 +25,49 @@ An Angular module that gives you access to the browsers local storage, **v0.1.1*
  - [bind](#bind)
  - [deriveKey](#derivekey)
  - [length](#length)
+ - [cookie](#cookie)
+  - [set](#cookie.set)
+  - [get](#cookie.get)
+  - [remove](#cookie.remove)
+  - [clearAll](#cookie.clearall)
 
+##Get Started
+**(1)** You can install angular-local-storage using 2 different ways:<br/>
+**Git:**
+clone & build [this](https://github.com/grevory/angular-local-storage.git) repository<br/>
+**Bower:**
+```bash
+$ bower install angular-local-storage
+```
+**npm:**
+```bash
+$ npm install angular-local-storage
+```
+**(2)** Include `angular-local-storage.js` (or `angular-local-storage.min.js`) in your `index.html`, after including Angular itself.
+
+**(3)** Add `'LocalStorageModule'` to your main module's list of dependencies.
+
+When you're done, your setup should look similar to the following:
+
+```html
+<!doctype html>
+<html ng-app="myApp">
+<head>
+   
+</head>
+<body>
+    ...
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+    <script src="bower_components/js/angular-local-storage.min.js"></script>
+    ...
+    <script>
+        var myApp = angular.module('myApp', ['LocalStorageModule']);
+
+    </script>
+    ...
+</body>
+</html>
+```
 ##Configuration
 ###setPrefix
 You could set a prefix to avoid overwriting any local storage variables from the rest of your app<br/>
@@ -132,7 +175,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 });
 ```
 ###keys
-Return array of keys for local storage, ignore keys that not owned.
+Return array of keys for local storage, ignore keys that not owned.<br/>
 **Returns:** `value from local storage`
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
@@ -207,52 +250,54 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
 });
 ```
-
-##Installation:
-
-```bash
-$ bower install angular-local-storage
+##Cookie
+Deal with browser's cookies directly.
+###cookie.set
+Directly adds a value to cookies.<br/>
+**Note:** Typically used as a fallback if local storage is not supported.<br/>
+**Returns:** `Boolean`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  function submit(key, val) {
+   return localStorageService.cookie.set(key, value);
+  }
+  //...
+});
 ```
-
-Example use:
-
-```javascript
-angular.module('yourModule', ['LocalStorageModule'])
-.controller('yourCtrl', [
-  '$scope',
-  'localStorageService',
-  function($scope, localStorageService) {
-    // Start fresh
-    localStorageService.clearAll();
-
-    // Set a key
-    localStorageService.set('Favorite Sport','Ultimate Frisbee');
-
-    // Delete a key
-    localStorageService.remove('Favorite Sport');
-}]);
-
-/*
-To set the prefix of your localStorage name, you can use the setPrefix method
-available on the localStorageServiceProvider
-*/
-angular.module('yourModule', ['LocalStorageModule'])
-.config(['localStorageServiceProvider', function(localStorageServiceProvider){
-  localStorageServiceProvider.setPrefix('newPrefix');
-}]);
+###cookie.get
+Directly get a value from a cookie.<br/>
+**Returns:** `value from local storage`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  function getItem(key) {
+   return localStorageService.cookie.get(key);
+  }
+  //...
+});
 ```
-
-#### How to bind to a $scope variable:
-Usage: localStorageService.bind(scope, scopeKey, def, lsKey);
+###cookie.remove
+Remove directly value from a cookie.<br/>
+**Returns:** `Boolean`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  function removeItem(key) {
+   return localStorageService.cookie.remove(key);
+  }
+  //...
+});
 ```
-// Example
-$scope.anArtist = {'firstname':'Pablo', 'lastname':'Picasso'};
-
-// Bind to local storage service
-localStorageService.bind($scope, 'anArtist', $scope.anArtist, 'specialArtist');
-
-// get bound data:
-console.log(localStorageService.get('specialArtist'));
+###clearAll
+Remove all data for this app from cookie.<br/>
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  function clearAll() {
+   return localStorageService.cookie.clearAll();
+  }
+});
 ```
 
 Check out the full demo and documentation at http://gregpike.net/demos/angular-local-storage/demo.html
