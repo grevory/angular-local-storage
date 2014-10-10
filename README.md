@@ -215,7 +215,9 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 });
 ```
 ###bind
-Bind $scope key to localStorageService.
+Bind $scope key to localStorageService.  
+**Usage:** `localStorageService.bind(scope, property, value[optional], key[optional])`  
+***key:*** The corresponding key used in local storage 
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
