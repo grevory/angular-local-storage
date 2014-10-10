@@ -1,7 +1,7 @@
 angular-local-storage
 =====================
 
-An Angular module that gives you access to the browsers local storage, **v0.1.1**
+An Angular module that gives you access to the browsers local storage, **v0.1.2**
 
 [![Build Status](https://secure.travis-ci.org/grevory/angular-local-storage.png?branch=master)](https://travis-ci.org/grevory/)
 
@@ -78,7 +78,6 @@ myApp.config(function (localStorageServiceProvider) {
     .setPrefix('yourAppName');
 });
 ```
-<<<<<<< HEAD
 ###setStorageType
 You could change web storage type to localStorage or sessionStorage<br/>
 **Default storage:** `localStorage`
@@ -309,9 +308,6 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 ```
 
 Check out the full demo at http://gregpike.net/demos/angular-local-storage/demo.html
-
-##TO DO:
-- Expand Readme
 
 ##Development:
 Clone the project: 
