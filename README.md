@@ -78,6 +78,7 @@ myApp.config(function (localStorageServiceProvider) {
     .setPrefix('yourAppName');
 });
 ```
+<<<<<<< HEAD
 ###setStorageType
 You could change web storage type to localStorage or sessionStorage<br/>
 **Default storage:** `localStorage`
@@ -217,16 +218,21 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 ###bind
 Bind $scope key to localStorageService.  
 **Usage:** `localStorageService.bind(scope, property, value[optional], key[optional])`  
-***key:*** The corresponding key used in local storage 
+***key:*** The corresponding key used in local storage
+**Returns:** deregistration function for this listener.
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   localStorageService.set('property', 'oldValue');
-  localStorageService.bind($scope, 'property');
+  var unbind = localStorageService.bind($scope, 'property');
   
   //Test Changes
-  $scope.property = 'newValue';
-  console.log(localStorageService.get('property')) // newValue;
+  $scope.property = 'newValue1';
+  console.log(localStorageService.get('property')) // newValue1;
+  //unbind watcher
+  unbind();
+  $scope.property = 'newValue2';
+  console.log(localStorageService.get('property')) // newValue1;
   //...
 });
 ```
@@ -302,7 +308,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 });
 ```
 
-Check out the full demo and documentation at http://gregpike.net/demos/angular-local-storage/demo.html
+Check out the full demo at http://gregpike.net/demos/angular-local-storage/demo.html
 
 ##TO DO:
 - Expand Readme
