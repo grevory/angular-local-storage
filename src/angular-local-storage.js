@@ -367,11 +367,8 @@ angularLocalStorage.provider('localStorageService', function() {
 
     // Add a listener on scope variable to save its changes to local storage
     // Return a function which when called cancels binding
-    var bindToScope = function(scope, scopeKey, def, lsKey) {
-      if (!lsKey) {
-        lsKey = scopeKey;
-      }
-
+    var bindToScope = function(scope, key, def, lsKey) {
+      lsKey = lsKey || key;
       var value = getFromLocalStorage(lsKey);
 
       if (value === null && isDefined(def)) {
@@ -380,11 +377,11 @@ angularLocalStorage.provider('localStorageService', function() {
         value = extend(def, value);
       }
 
-      $parse(scopeKey).assign(scope, value);
+      $parse(key).assign(scope, value);
 
-      return scope.$watchCollection(scopeKey, function(newVal) {
+      return scope.$watch(key, function(newVal) {
         addToLocalStorage(lsKey, newVal);
-      });
+      }, isObject(scope[key]));
     };
 
     // Return localStorageService.length
