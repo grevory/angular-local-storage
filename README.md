@@ -248,7 +248,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 });
 ```
 ###length
-Return localStorageService.length, ignore keys that not owned.
+Return localStorageService.length, ignore keys that not owned.  
 **Returns** `Number`
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
