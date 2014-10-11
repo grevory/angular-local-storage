@@ -320,6 +320,23 @@ describe('localStorageService', function() {
     expect($rootScope.property).toEqual(localStorageService.get('lsProperty'));
   }));
 
+  it('should $watch with deep comparison only for objects', inject(function($rootScope, localStorageService) {
+    var mocks = [{}, [], 'string', 90, false];
+    var expectation = [true, true, false, false, false];
+    var results = [];
+
+    spyOn($rootScope, '$watch').andCallFake(function(key, func, eq) {
+      results.push(eq);
+    });
+
+    mocks.forEach(function(elm, i) {
+      localStorageService.set('mock' + i, elm);
+      localStorageService.bind($rootScope, 'mock' + i);
+    });
+
+    expect(results).toEqual(expectation);
+  }));
+
   it('should be able to return it\'s owned keys amount', inject(
     function(localStorageService, $window) {
 
