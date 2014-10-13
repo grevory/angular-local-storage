@@ -223,18 +223,27 @@ Bind $scope key to localStorageService.
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   localStorageService.set('property', 'oldValue');
-  var unbind = localStorageService.bind($scope, 'property');
+  $scope.unbind = localStorageService.bind($scope, 'property');
   
   //Test Changes
-  $scope.property = 'newValue1';
-  console.log(localStorageService.get('property')) // newValue1;
-  //unbind watcher
-  unbind();
-  $scope.property = 'newValue2';
-  console.log(localStorageService.get('property')) // newValue1;
+  $scope.update = function(val) {
+    $scope.property = val;
+    $timeout(function() {
+      alert("localStorage value: " + localStorageService.get('property'));
+    });
+  }
   //...
 });
 ```
+```html
+<div ng-controller="MainCtrl">
+  <p>{{property}}</p>
+  <input type="text" ng-model="lsValue"/>
+  <button ng-click="update(lsValue)">update</button>
+  <button ng-click="unbind()">unbind</button>
+</div>
+```
+
 ###deriveKey
 Return the derive key
 **Returns** `String`
