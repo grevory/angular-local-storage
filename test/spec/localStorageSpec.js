@@ -3,30 +3,6 @@
 describe('localStorageService', function() {
   var elmSpy;
 
-  //Mock
-  function localStorageMock() {
-    var keys = {};
-
-    return {
-      setItem: function(key, value) {
-        keys[key] = value || '';
-      },
-      getItem: function(key) {
-        return keys[key];
-      },
-      removeItem: function(key) {
-        delete keys[key];
-      },
-      get length() {
-        return Object.keys(keys).length;
-      },
-      key: function(i) {
-        var aKeys = Object.keys(keys);
-        return aKeys[i] || null;
-      }
-    };
-  }
-
   //Actions
   function getItem(key) {
     return function($window, localStorageService) {
@@ -155,6 +131,11 @@ describe('localStorageService', function() {
     expectAdding('ls.foo', 'bar')
   ));
 
+  it('should add key to localeStorage null if value not provided', inject(
+    addItem('foo'),
+    expectAdding('ls.foo', null)
+  ));
+
   it('should support to set custom prefix', function() {
     module(setPrefix('myApp'));
     inject(
@@ -266,6 +247,17 @@ describe('localStorageService', function() {
     });
   });
 
+  it('should be able to notify/broadcasting if set', function() {
+    module(setNotify(true, true));
+    inject(function($rootScope, localStorageService) {
+      var spy = spyOn($rootScope, '$broadcast');
+
+      localStorageService.set('a8m', 'foobar');
+      localStorageService.remove('a8m', 'foobar');
+      expect(spy.callCount).toEqual(2);
+    });
+  });
+
   it('should be able to bind to scope', inject(function($rootScope, localStorageService) {
 
     localStorageService.set('property', 'oldValue');
@@ -346,6 +338,33 @@ describe('localStorageService', function() {
       }
       expect(localStorageService.length()).toEqual(10);
       expect($window.localStorage.length).toEqual(20);
+  }));
+
+  it('should be able to clear all owned keys from storage',inject(function($window, localStorageService) {
+    for(var i = 0; i < 10; i++) {
+      localStorageService.set('key' + i, 'val' + i);
+      $window.localStorage.setItem('key' + i, 'val' + i);
+    }
+
+    localStorageService.clearAll();
+    //remove only owned keys
+    for(var l = 0; l < 10; l++) {
+      expect(localStorageService.get('key' + l)).toEqual(null);
+      expect($window.localStorage.getItem('key' + l)).toEqual('val' + l);
+    }
+  }));
+
+  it('should return array of all owned keys', inject(function($window, localStorageService) {
+    //set keys
+    for(var i = 0; i < 10; i++) {
+      //localStorageService
+      localStorageService.set('ownKey' + i, 'val' + i);
+      //window.localStorage
+      $window.localStorage.setItem('windowKey' + i, 'val' + i);
+    }
+    localStorageService.keys().forEach(function(el, i) {
+      expect(el).toEqual('ownKey' + i);
+    });
   }));
 
   //sessionStorage
@@ -451,6 +470,32 @@ describe('localStorageService', function() {
       localStorageService.cookie.set('cookieKey', ['foo', 'bar']);
       expect(localStorageService.cookie.get('cookieKey')).toEqual(['foo', 'bar']);
     }));
+
+    it('should be able to clear all owned keys from cookie', inject(function(localStorageService, $document) {
+      localStorageService.set('ownKey1', 1);
+      $document.cookie = "username=John Doe";
+      localStorageService.clearAll();
+      expect(localStorageService.get('ownKey1')).toEqual(null);
+      expect($document.cookie).not.toEqual('');
+    }));
+
+    it('should be broadcast on adding item', function() {
+      module(setNotify(true, false));
+      inject(function($rootScope, localStorageService) {
+        var spy = spyOn($rootScope, '$broadcast');
+        localStorageService.set('a8m', 'foobar');
+        expect(spy).toHaveBeenCalled();
+      });
+    });
+
+    it('should be broadcast on removing item', function() {
+      module(setNotify(false, true));
+      inject(function($rootScope, localStorageService) {
+        var spy = spyOn($rootScope, '$broadcast');
+        localStorageService.remove('a8m', 'foobar');
+        expect(spy).toHaveBeenCalled();
+      });
+    });
 
     Date.prototype.addDays = function(days) {
       var date = new Date(this.getTime());

@@ -22,13 +22,14 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
     // list of files / patterns to load in the browser
     files: [
       bower + 'angular/angular.js',
       bower + 'angular-mocks/angular-mocks.js',
       'src/*.js',
+      'test/mock/*.js',
       'test/spec/**/*.js'
     ],
 
@@ -44,6 +45,19 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: true
+    singleRun: true,
+
+    reporters: ['progress', 'coverage'],
+
+    // preprocessors
+    preprocessors: {
+      'src/*.js': ['coverage']
+    },
+
+    // configure the reporter
+    coverageReporter: {
+      type : 'lcov',
+      dir : 'coverage/'
+    }
   });
 };
