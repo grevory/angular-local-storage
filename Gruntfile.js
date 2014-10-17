@@ -46,12 +46,7 @@ module.exports = function(grunt) {
     karma: {
       options: {
         autowatch: true,
-        browsers: [
-          'PhantomJS'
-        ],
-        configFile: 'test/karma.conf.js',
-        reporters: ['dots'],
-        singleRun: true
+        configFile: 'test/karma.conf.js'
       },
       unit: {}
     },
