@@ -99,7 +99,7 @@ myApp.config(function (localStorageServiceProvider) {
 });
 ```
 ###setStorageCookieDomain
-Set for cookie domain<br/>
+Set the cookie domain, since this runs inside a the `config()` block, only providers and constants can be injected.  As a result, `$location` service can't be used here, use a hardcoded string or `window.location`.<br/>
 **No default value**
 ```js
 myApp.config(function (localStorageServiceProvider) {
