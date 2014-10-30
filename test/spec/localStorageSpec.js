@@ -62,6 +62,12 @@ describe('localStorageService', function() {
     };
   }
 
+  function expectCookieSupporting(expected) {
+    return function(localStorageService) {
+      expect(localStorageService.cookie.isSupported).toEqual(expected);
+    };
+  }
+
   function expectDomain(domain) {
     return function($document, localStorageService) {
       localStorageService.set('foo','bar'); //Should trigger first time
@@ -417,7 +423,10 @@ describe('localStorageService', function() {
     beforeEach(module('LocalStorageModule', function($provide) {
       $provide.value('$window', {
         localStorage: false,
-        sessionStorage: false
+        sessionStorage: false,
+        navigator: {
+          cookieEnabled: true
+        }
       });
       $provide.value('$document', {
         cookie: ''
@@ -426,6 +435,10 @@ describe('localStorageService', function() {
 
     it('isSupported should be false on fallback mode', inject(
       expectSupporting(false)
+    ));
+
+    it('cookie.isSupported should be true if cookies are enabled', inject(
+      expectCookieSupporting(true)
     ));
 
     it('fallback storage type should be cookie', inject(
@@ -504,4 +517,22 @@ describe('localStorageService', function() {
     };
   });
 
+  //cookie disabled
+  describe('No Cookie', function() {
+
+    beforeEach(module('LocalStorageModule', function($provide) {
+      $provide.value('$window', {
+        navigator: {
+          cookieEnabled: false
+        }
+      });
+      $provide.value('$document', {
+
+      });
+    }));
+
+    it('cookie.isSupported should be false if cookies are disabled', inject(
+      expectCookieSupporting(false)
+    ));
+  });
 });
