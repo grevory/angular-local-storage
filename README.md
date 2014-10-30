@@ -1,7 +1,7 @@
 angular-local-storage
 =====================
 
-An Angular module that gives you access to the browsers local storage, **v0.1.3**
+An Angular module that gives you access to the browsers local storage, **v0.1.4**
 
 [![Build Status](https://secure.travis-ci.org/grevory/angular-local-storage.png?branch=master)](https://travis-ci.org/grevory/) [![Coverage Status](https://img.shields.io/coveralls/grevory/angular-local-storage.svg)](https://coveralls.io/r/grevory/angular-local-storage?branch=master)
 
@@ -27,6 +27,7 @@ An Angular module that gives you access to the browsers local storage, **v0.1.3*
  - [deriveKey](#derivekey)
  - [length](#length)
  - [cookie](#cookie)
+    - [isSupported](#cookieissupported)
     - [set](#cookieset)
     - [get](#cookieget)
     - [remove](#cookieremove)
@@ -269,6 +270,18 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 ```
 ##Cookie
 Deal with browser's cookies directly.
+##cookie.isSupported
+Checks if cookies are enabled in the browser.
+**Returns:** `Boolean`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  if(localStorageService.cookie.isSupported) {
+    //...
+  }
+  //...
+});
+```
 ###cookie.set
 Directly adds a value to cookies.<br/>
 **Note:** Typically used as a fallback if local storage is not supported.<br/>
