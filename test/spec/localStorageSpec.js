@@ -150,6 +150,19 @@ describe('localStorageService', function() {
     );
   });
 
+  it('should be able to chain functions in the config phase', function() {
+    module(function(localStorageServiceProvider) {
+        localStorageServiceProvider
+          .setPrefix('chain')
+          .setNotify(false, true)
+          .setStorageType('session');
+      });
+    inject(function(localStorageService) {
+      expect(localStorageService.deriveKey('foo')).toEqual('chain.foo');
+      expect(localStorageService.getStorageType()).toEqual('session');
+    });
+  });
+
   it('should be able to return the derive key', function() {
     module(setPrefix('myApp'));
     inject(function(localStorageService) {
