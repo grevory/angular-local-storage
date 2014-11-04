@@ -30,11 +30,13 @@ angularLocalStorage.provider('localStorageService', function() {
   // Setter for the prefix
   this.setPrefix = function(prefix) {
     this.prefix = prefix;
+    return this;
   };
 
    // Setter for the storageType
    this.setStorageType = function(storageType) {
-       this.storageType = storageType;
+     this.storageType = storageType;
+     return this;
    };
 
   // Setter for cookie config
@@ -43,11 +45,13 @@ angularLocalStorage.provider('localStorageService', function() {
       expiry: exp,
       path: path
     };
+    return this;
   };
 
   // Setter for cookie domain
   this.setStorageCookieDomain = function(domain) {
     this.cookie.domain = domain;
+    return this;
   };
 
   // Setter for notification config
@@ -57,6 +61,7 @@ angularLocalStorage.provider('localStorageService', function() {
       setItem: itemSet,
       removeItem: itemRemove
     };
+    return this;
   };
 
   this.$get = ['$rootScope', '$window', '$document', '$parse', function($rootScope, $window, $document, $parse) {
