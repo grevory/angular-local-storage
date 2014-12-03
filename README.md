@@ -108,6 +108,9 @@ myApp.config(function (localStorageServiceProvider) {
     .setStorageCookieDomain('<domain>');
 });
 ```
+
+For local testing (when you are testing on localhost) set the domain to an empty string ''. Setting the domain to 'localhost' will not work on all browsers (eg. Chrome) since some browsers only allow you to set domain cookies for registry controlled domains, i.e. something ending in .com or so, but not IPs **or intranet hostnames** like localhost. </br>
+
 ###setNotify
 Send signals for each of the following actions:<br/>
 **setItem** , default: `true`<br/>
