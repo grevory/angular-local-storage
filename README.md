@@ -3,7 +3,12 @@ angular-local-storage
 
 An Angular module that gives you access to the browsers local storage, **v0.1.5**
 
-[![Build Status](https://secure.travis-ci.org/grevory/angular-local-storage.png?branch=master)](https://travis-ci.org/grevory/) [![Coverage Status](https://img.shields.io/coveralls/grevory/angular-local-storage.svg)](https://coveralls.io/r/grevory/angular-local-storage?branch=master)
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![Dependency Status][david-image]][david-url]
+[![License][license-image]][license-url]
+[![Downloads][downloads-image]][downloads-url]
 
 ##Table of contents:
 - [Get Started](#get-started)
@@ -357,4 +362,15 @@ $ git tag 0.*.*
 $ git push origin master --tags
 ```
 
-
+[npm-image]: https://img.shields.io/npm/v/angular-local-storage.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/angular-local-storage
+[travis-image]: https://img.shields.io/travis/grevory/angular-local-storage.svg?style=flat-square
+[travis-url]: https://travis-ci.org/grevory/angular-local-storage
+[coveralls-image]: https://img.shields.io/coveralls/grevory/angular-local-storage.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/grevory/angular-local-storage
+[david-image]: http://img.shields.io/david/grevory/angular-local-storage.svg?style=flat-square
+[david-url]: https://david-dm.org/grevory/angular-local-storage
+[license-image]: http://img.shields.io/npm/l/angular-local-storage.svg?style=flat-square
+[license-url]: LICENSE
+[downloads-image]: http://img.shields.io/npm/dm/angular-local-storage.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/angular-local-storage
