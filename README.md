@@ -298,7 +298,7 @@ Directly adds a value to cookies.<br/>
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   function submit(key, val) {
-   return localStorageService.cookie.set(key, value);
+   return localStorageService.cookie.set(key, val);
   }
   //...
 });
