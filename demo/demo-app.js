@@ -1,13 +1,13 @@
-angular.module('demoModule', ['LocalStorageModule'])
-.config(['localStorageServiceProvider', function(localStorageServiceProvider){
+'use strict';
+window.angular.module('demoModule', ['LocalStorageModule'])
+.config(function(localStorageServiceProvider){
   localStorageServiceProvider.setPrefix('demoPrefix');
   // localStorageServiceProvider.setStorageCookieDomain('example.com');
   // localStorageServiceProvider.setStorageType('sessionStorage');
-}])
-.controller('DemoCtrl', [
-  '$scope',
-  'localStorageService',
+})
+.controller('DemoCtrl',
   function($scope, localStorageService) {
+    $scope.localStorageDemo = localStorageService.get('localStorageDemo');
 
     $scope.$watch('localStorageDemo', function(value){
       localStorageService.set('localStorageDemo',value);
@@ -23,5 +23,13 @@ angular.module('demoModule', ['LocalStorageModule'])
     if (!localStorageService.isSupported) {
       $scope.storageType = 'Cookie';
     }
+
+    $scope.$watch(function(){
+      return localStorageService.get('localStorageDemo');
+    }, function(value){
+      $scope.localStorageDemo = value;
+    });
+
+    $scope.clearAll = localStorageService.clearAll;
   }
-]);
+);

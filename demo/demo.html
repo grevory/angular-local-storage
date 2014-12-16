@@ -1,18 +1,17 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
+
 <title>Demo of Angular Local Storage Module</title>
+
 <meta name="description" content="Demo of Angular Local Storage Module">
 <meta name="author" content="Gregory Pike">
-<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<!-- Place favicon.ico and apple-touch-icon.png in the root of your domain and delete these references -->
-<!--[if IE]><![endif]--><!-- Used to speed CSS loading -->
+
 <link rel="stylesheet" href="http://necolas.github.com/normalize.css/2.0.1/normalize.css">
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
 <link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" rel="stylesheet">
 <link href="demo-style.css" rel="stylesheet">
-    
+
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
@@ -30,16 +29,18 @@
   </div>
 
   <div class="hero-unit">
-    
+
     <h1>Give it a try</h1>
 
     <div ng-controller="DemoCtrl">
       <p><input type="text" ng-model="localStorageDemo" placeholder="Start typing..."></p>
 
       <blockquote class="well" ng-show="localStorageDemoValue">
-        <p>{{localStorageDemoValue}}</p>
+        <p ng-bind="localStorageDemoValue"></p>
         <small>{{storageType}} value</small>
       </blockquote>
+
+      <p><button ng-click="clearAll()">Clear All</button></p>
     </div>
 
     <p>The Angular Local Storage Module is meant to be a plug-and-play Angular module for accessing the browsers Local Storage API.</p>
@@ -144,11 +145,11 @@ var YourCtrl = function($scope, localStorageService, ...) {
 </div>
 
 <!-- END DEMO -->
-    
+
 <!-- JAVASCRIPT -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
 <script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
-<script src="../dist/angular-local-storage.min.js"></script>
+<script src="https://rawgit.com/grevory/angular-local-storage/master/dist/angular-local-storage.min.js"></script>
 <script src="demo-app.js"></script>
 </body>
 </html>
