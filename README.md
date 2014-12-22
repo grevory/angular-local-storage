@@ -138,7 +138,7 @@ myApp.config(function (localStorageServiceProvider) {
 ```
 ##API Documentation
 ##isSupported
-Checks if the browser support the current storage type(e.g: `localStorage`, `sessionStorage`).
+Checks if the browser support the current storage type(e.g: `localStorage`, `sessionStorage`).  
 **Returns:** `Boolean`
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
@@ -227,7 +227,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 ###bind
 Bind $scope key to localStorageService.  
 **Usage:** `localStorageService.bind(scope, property, value[optional], key[optional])`  
-***key:*** The corresponding key used in local storage
+***key:*** The corresponding key used in local storage  
 **Returns:** deregistration function for this listener.
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
@@ -255,7 +255,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 ```
 
 ###deriveKey
-Return the derive key
+Return the derive key  
 **Returns** `String`
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
@@ -279,7 +279,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 ##Cookie
 Deal with browser's cookies directly.
 ##cookie.isSupported
-Checks if cookies are enabled in the browser.
+Checks if cookies are enabled in the browser.  
 **Returns:** `Boolean`
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
