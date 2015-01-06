@@ -166,7 +166,7 @@ If local storage is not supported, use cookies instead.<br/>
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   function submit(key, val) {
-   return localStorageService.set(key, value);
+   return localStorageService.set(key, val);
   }
   //...
 });
