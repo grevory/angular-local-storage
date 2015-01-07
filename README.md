@@ -329,6 +329,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 ```
 ###clearAll
 Remove all data for this app from cookie.<br/>
+**Returns:** `Boolean`
 ```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
