@@ -85,6 +85,13 @@ describe('localStorageService', function() {
     };
   }
 
+  function changePrefix(newPrefix) {
+    return function($document, localStorageService) {
+      localStorageService.changePrefix(newPrefix);
+      expect(localStorageService.prefix).isEqual(newPrefix);
+    };
+  }
+
   //Provider
   function setPrefix(prefix) {
     return function(localStorageServiceProvider) {

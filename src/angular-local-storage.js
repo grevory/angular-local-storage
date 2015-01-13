@@ -402,8 +402,13 @@ angularLocalStorage.provider('localStorageService', function() {
       return count;
     };
 
+    var changePrefix = function(localStoragePrefix) {
+      prefix = localStoragePrefix;
+    };
+
     return {
       isSupported: browserSupportsLocalStorage,
+      changePrefix: changePrefix,
       getStorageType: getStorageType,
       set: addToLocalStorage,
       add: addToLocalStorage, //DEPRECATED
