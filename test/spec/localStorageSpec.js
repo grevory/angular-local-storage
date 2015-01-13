@@ -85,13 +85,6 @@ describe('localStorageService', function() {
     };
   }
 
-  function changePrefix(newPrefix) {
-    return function($document, localStorageService) {
-      localStorageService.changePrefix(newPrefix);
-      expect(localStorageService.prefix).isEqual(newPrefix);
-    };
-  }
-
   //Provider
   function setPrefix(prefix) {
     return function(localStorageServiceProvider) {
@@ -155,6 +148,18 @@ describe('localStorageService', function() {
       addItem('foo', 'bar'),
       expectAdding('myApp.foo', 'bar')
     );
+  });
+
+  it('should support changing custom prefix', function() {
+    module(function(localStorageServiceProvider) {
+      localStorageServiceProvider.setPrefix('startPrefix');
+    });
+
+    inject(function(localStorageService) {
+      localStorageService.changePrefix('newPrefix'),
+      localStorageService.add('foo', 'bar'),
+      expectAdding('newPrefix.foo', 'bar')
+    })
   });
 
   it('should be able to chain functions in the config phase', function() {
