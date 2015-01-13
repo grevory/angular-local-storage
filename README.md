@@ -159,15 +159,16 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   localStorageService.changePrefix('newPrefix');
   //...
 });
+```
 ###getStorageType
 **Returns:** `String`
-```js
+```
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   var storageType = localStorageService.getStorageType(); //e.g localStorage
   //...
 });
-```js
+```
 ###set
 Directly adds a value to local storage.<br/>
 If local storage is not supported, use cookies instead.<br/>
