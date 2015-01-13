@@ -153,7 +153,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 ###changePrefix
 Change the local storage prefix during execution
 **Returns:** `Null`
-'''js
+```js
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   localStorageService.changePrefix('newPrefix');
