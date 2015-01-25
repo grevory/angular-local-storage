@@ -44,7 +44,7 @@ An Angular module that gives you access to the browsers local storage, **v0.1.5*
 clone & build [this](https://github.com/grevory/angular-local-storage.git) repository<br/>
 **Bower:**
 ```bash
-$ bower install angular-local-storage
+$ bower install angular-local-storage --save
 ```
 **npm:**
 ```bash
