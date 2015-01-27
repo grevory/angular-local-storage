@@ -150,6 +150,14 @@ describe('localStorageService', function() {
     );
   });
 
+  it('should support to set empty prefix', function() {
+    module(setPrefix(''));
+    inject(
+      addItem('foo', 'bar'),
+      expectAdding('foo', 'bar')
+    );
+  });
+
   it('should be able to chain functions in the config phase', function() {
     module(function(localStorageServiceProvider) {
         localStorageServiceProvider
@@ -242,6 +250,19 @@ describe('localStorageService', function() {
     expect($window.localStorage.getItem('ls.appKey')).not.toBeDefined();
     expect($window.localStorage.getItem('appKey')).toBeDefined();
   }));
+
+  it('should be able only to remove keys with empty prefix', function() {
+    module(setPrefix(''));
+    inject(function($window, localStorageService) {
+      localStorageService.set('appKey', 'appValue');
+
+      expect($window.localStorage.getItem('appKey')).toBeDefined();
+
+      localStorageService.remove('appKey');
+
+      expect($window.localStorage.getItem('appKey')).not.toBeDefined();
+    });
+  });
 
   it('should broadcast event on settingItem', inject(function($rootScope, localStorageService) {
     var setSpy = spyOn($rootScope, '$broadcast');
@@ -357,7 +378,8 @@ describe('localStorageService', function() {
       }
       expect(localStorageService.length()).toEqual(10);
       expect($window.localStorage.length).toEqual(20);
-  }));
+    })
+  );
 
   it('should be able to clear all owned keys from storage',inject(function($window, localStorageService) {
     for(var i = 0; i < 10; i++) {
@@ -372,6 +394,46 @@ describe('localStorageService', function() {
       expect($window.localStorage.getItem('key' + l)).toEqual('val' + l);
     }
   }));
+
+  it('should be able to clear owned keys from storage, using RegExp',inject(function($window, localStorageService) {
+    for(var i = 0; i < 10; i++) {
+      localStorageService.set('key' + i, 'val' + i);
+      localStorageService.set('otherKey' + i, 'val' + i);
+      $window.localStorage.setItem('key' + i, 'val' + i);
+      $window.localStorage.setItem('otherKey' + i, 'val' + i);
+    }
+    localStorageService.set('keyAlpha', 'val');
+
+    localStorageService.clearAll(/^key/);
+
+    //remove only owned keys that follow RegExp
+    for(var l = 0; l < 10; l++) {
+      expect(localStorageService.get('key' + l)).toEqual(null);
+      expect($window.localStorage.getItem('key' + l)).toEqual('val' + l);
+      expect(localStorageService.get('otherKey' + l)).toEqual('val' + l);
+      expect($window.localStorage.getItem('otherKey' + l)).toEqual('val' + l);
+    }
+  }));
+
+  it('should be able to clear owned keys from storage, using RegExp when prefix is empty string', function() {
+    module(setPrefix(''));
+    inject(function($window, localStorageService) {
+      for(var i = 0; i < 10; i++) {
+        localStorageService.set('key' + i, 'val' + i);
+        localStorageService.set('otherKey' + i, 'val' + i);
+      }
+      localStorageService.set('keyAlpha', 'val');
+
+      localStorageService.clearAll(/^key/);
+      
+      for(var l = 0; l < 10; l++) {
+        expect(localStorageService.get('key' + l)).toEqual(null);
+        expect($window.localStorage.getItem('key' + l)).toEqual(null);
+        expect(localStorageService.get('otherKey' + l)).toEqual('val' + l);
+        expect($window.localStorage.getItem('otherKey' + l)).toEqual('val' + l);
+      }
+    });
+  });
 
   it('should return array of all owned keys', inject(function($window, localStorageService) {
     //set keys

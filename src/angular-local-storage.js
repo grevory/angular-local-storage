@@ -234,16 +234,15 @@ angularLocalStorage.provider('localStorageService', function() {
     // Should be used mostly for development purposes
     var clearAllFromLocalStorage = function (regularExpression) {
 
-      regularExpression = regularExpression || "";
-      //accounting for the '.' in the prefix when creating a regex
-      var tempPrefix = prefix.slice(0, -1);
-      var testRegex = new RegExp(tempPrefix + '.' + regularExpression);
+      // Setting both regular expressions independently
+      // Empty strings result in catchall RegExp
+      var prefixRegex = !!prefix ? new RegExp('^' + prefix) : new RegExp();
+      var testRegex = !!regularExpression ? new RegExp(regularExpression) : new RegExp();
 
       if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
         if (!browserSupportsLocalStorage) {
           $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
         }
-
         return clearAllFromCookies();
       }
 
@@ -251,7 +250,7 @@ angularLocalStorage.provider('localStorageService', function() {
 
       for (var key in webStorage) {
         // Only remove items that are for this app and match the regular expression
-        if (testRegex.test(key)) {
+        if (prefixRegex.test(key) && testRegex.test(key.substr(prefixLength))) {
           try {
             removeFromLocalStorage(key.substr(prefixLength));
           } catch (e) {
