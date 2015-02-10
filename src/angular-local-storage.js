@@ -42,7 +42,7 @@ angularLocalStorage.provider('localStorageService', function() {
   // Setter for cookie config
   this.setStorageCookie = function(exp, path) {
     this.cookie.expiry = exp;
-	this.cookie.path = path;
+    this.cookie.path = path;
     return this;
   };
 
