@@ -135,9 +135,6 @@ angularLocalStorage.provider('localStorageService', function() {
       }
 
       try {
-        if (isObject(value) || isArray(value)) {
-          value = toJson(value);
-        }
         if (webStorage) {webStorage.setItem(deriveQualifiedKey(key), value)};
         if (notify.setItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: self.storageType});
