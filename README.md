@@ -1,8 +1,5 @@
 angular-local-storage
 =====================
-
-[![Join the chat at https://gitter.im/grevory/angular-local-storage](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/grevory/angular-local-storage?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 An Angular module that gives you access to the browsers local storage, **v0.1.5**
 
 [![NPM version][npm-image]][npm-url]
@@ -13,6 +10,7 @@ An Angular module that gives you access to the browsers local storage, **v0.1.5*
 [![Downloads][downloads-image]][downloads-url]
 
 ##Table of contents:
+- [![Gitter][gitter-image]][gitter-url]
 - [Get Started](#get-started)
 - [Development](#development)
 - [Configuration](#configuration)
@@ -377,3 +375,5 @@ $ git push origin master --tags
 [license-url]: LICENSE
 [downloads-image]: http://img.shields.io/npm/dm/angular-local-storage.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/angular-local-storage
+[gitter-image]: https://badges.gitter.im/Join%20Chat.svg
+[gitter-url]: https://gitter.im/grevory/angular-local-storage?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
