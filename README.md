@@ -1,6 +1,8 @@
 angular-local-storage
 =====================
 
+[![Join the chat at https://gitter.im/grevory/angular-local-storage](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/grevory/angular-local-storage?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 An Angular module that gives you access to the browsers local storage, **v0.1.5**
 
 [![NPM version][npm-image]][npm-url]
