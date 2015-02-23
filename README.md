@@ -50,7 +50,7 @@ $ bower install angular-local-storage --save
 ```bash
 $ npm install angular-local-storage
 ```
-**(2)** Include `angular-local-storage.js` (or `angular-local-storage.min.js`) in your `index.html`, after including Angular itself.
+**(2)** Include `angular-local-storage.js` (or `angular-local-storage.min.js`) from the [dist](https://github.com/grevory/angular-local-storage/tree/master/dist) directory in your `index.html`, after including Angular itself.
 
 **(3)** Add `'LocalStorageModule'` to your main module's list of dependencies.
 
