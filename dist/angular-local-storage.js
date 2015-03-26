@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.1.5 - 2014-11-04
+ * @version v0.1.5 - 2015-03-21
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ var angularLocalStorage = angular.module('LocalStorageModule', []);
 angularLocalStorage.provider('localStorageService', function() {
 
   // You should set a prefix to avoid overwriting any local storage variables from the rest of your app
-  // e.g. localStorageServiceProvider.setPrefix('youAppName');
+  // e.g. localStorageServiceProvider.setPrefix('yourAppName');
   // With provider you can use config as this:
   // myApp.config(function (localStorageServiceProvider) {
   //    localStorageServiceProvider.prefix = 'yourAppName';
@@ -68,10 +68,8 @@ angularLocalStorage.provider('localStorageService', function() {
 
   // Setter for cookie config
   this.setStorageCookie = function(exp, path) {
-    this.cookie = {
-      expiry: exp,
-      path: path
-    };
+    this.cookie.expiry = exp;
+    this.cookie.path = path;
     return this;
   };
 
@@ -164,9 +162,6 @@ angularLocalStorage.provider('localStorageService', function() {
       }
 
       try {
-        if (isObject(value) || isArray(value)) {
-          value = toJson(value);
-        }
         if (webStorage) {webStorage.setItem(deriveQualifiedKey(key), value)};
         if (notify.setItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: self.storageType});
@@ -261,16 +256,15 @@ angularLocalStorage.provider('localStorageService', function() {
     // Should be used mostly for development purposes
     var clearAllFromLocalStorage = function (regularExpression) {
 
-      regularExpression = regularExpression || "";
-      //accounting for the '.' in the prefix when creating a regex
-      var tempPrefix = prefix.slice(0, -1);
-      var testRegex = new RegExp(tempPrefix + '.' + regularExpression);
+      // Setting both regular expressions independently
+      // Empty strings result in catchall RegExp
+      var prefixRegex = !!prefix ? new RegExp('^' + prefix) : new RegExp();
+      var testRegex = !!regularExpression ? new RegExp(regularExpression) : new RegExp();
 
       if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
         if (!browserSupportsLocalStorage) {
           $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
         }
-
         return clearAllFromCookies();
       }
 
@@ -278,7 +272,7 @@ angularLocalStorage.provider('localStorageService', function() {
 
       for (var key in webStorage) {
         // Only remove items that are for this app and match the regular expression
-        if (testRegex.test(key)) {
+        if (prefixRegex.test(key) && testRegex.test(key.substr(prefixLength))) {
           try {
             removeFromLocalStorage(key.substr(prefixLength));
           } catch (e) {
@@ -305,7 +299,7 @@ angularLocalStorage.provider('localStorageService', function() {
     // Directly adds a value to cookies
     // Typically used as a fallback is local storage is not available in the browser
     // Example use: localStorageService.cookie.add('library','angular');
-    var addToCookies = function (key, value) {
+    var addToCookies = function (key, value, daysToExpiry) {
 
       if (isUndefined(value)) {
         return false;
@@ -328,6 +322,9 @@ angularLocalStorage.provider('localStorageService', function() {
           expiryDate.setTime(expiryDate.getTime() + (-1 * 24 * 60 * 60 * 1000));
           expiry = "; expires=" + expiryDate.toGMTString();
           value = '';
+        } else if (isNumber(daysToExpiry) && daysToExpiry !== 0) {
+          expiryDate.setTime(expiryDate.getTime() + (daysToExpiry * 24 * 60 * 60 * 1000));
+          expiry = "; expires=" + expiryDate.toGMTString();
         } else if (cookie.expiry !== 0) {
           expiryDate.setTime(expiryDate.getTime() + (cookie.expiry * 24 * 60 * 60 * 1000));
           expiry = "; expires=" + expiryDate.toGMTString();

@@ -85,6 +85,15 @@ describe('localStorageService', function() {
     };
   }
 
+  function expectCookieExpiry(exp) {
+    return function($document, localStorageService) {
+      localStorageService.cookie.set('foo','bar',10); //Should trigger first time
+      // Just compare the expiry date, not the time, because of daylight savings
+      var expiryStringPartial = exp.substr(0, exp.indexOf(new Date().getFullYear()));
+      expect($document.cookie.indexOf('expires=' + expiryStringPartial)).not.toEqual(-1);
+    };
+  }
+
   //Provider
   function setPrefix(prefix) {
     return function(localStorageServiceProvider) {
@@ -534,6 +543,10 @@ describe('localStorageService', function() {
       localStorageService.set('cookieKey', 'cookieValue');
       expect(localStorageService.get('cookieKey')).toEqual('cookieValue');
     }));
+
+    it('should be able to set individual cookie with expiry', function() {
+      inject(expectCookieExpiry(new Date().addDays(10)));
+    });
 
     it('should be able to remove from cookie', inject(function(localStorageService) {
       localStorageService.set('cookieKey', 'cookieValue');

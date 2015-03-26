@@ -272,7 +272,7 @@ angularLocalStorage.provider('localStorageService', function() {
     // Directly adds a value to cookies
     // Typically used as a fallback is local storage is not available in the browser
     // Example use: localStorageService.cookie.add('library','angular');
-    var addToCookies = function (key, value) {
+    var addToCookies = function (key, value, daysToExpiry) {
 
       if (isUndefined(value)) {
         return false;
@@ -295,6 +295,9 @@ angularLocalStorage.provider('localStorageService', function() {
           expiryDate.setTime(expiryDate.getTime() + (-1 * 24 * 60 * 60 * 1000));
           expiry = "; expires=" + expiryDate.toGMTString();
           value = '';
+        } else if (isNumber(daysToExpiry) && daysToExpiry !== 0) {
+          expiryDate.setTime(expiryDate.getTime() + (daysToExpiry * 24 * 60 * 60 * 1000));
+          expiry = "; expires=" + expiryDate.toGMTString();
         } else if (cookie.expiry !== 0) {
           expiryDate.setTime(expiryDate.getTime() + (cookie.expiry * 24 * 60 * 60 * 1000));
           expiry = "; expires=" + expiryDate.toGMTString();
