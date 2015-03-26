@@ -303,6 +303,11 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
 });
 ```
+**Cookie Expiry** Pass a third argument to specify number of days to expiry
+```js
+    localStorageService.cookie.set(key,val,10)
+```
+sets a cookie that expires in 10 days.
 ###cookie.get
 Directly get a value from a cookie.<br/>
 **Returns:** `value from local storage`
