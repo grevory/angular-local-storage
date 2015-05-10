@@ -7,8 +7,7 @@ var isDefined = angular.isDefined,
   isObject = angular.isObject,
   isArray = angular.isArray,
   extend = angular.extend,
-  toJson = angular.toJson,
-  fromJson = angular.fromJson;
+  toJson = angular.toJson;
 
 
 // Test if string is only contains numbers
