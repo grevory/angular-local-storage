@@ -1,6 +1,6 @@
 angular-local-storage
 =====================
-An Angular module that gives you access to the browsers local storage, **v0.1.5**
+An Angular module that gives you access to the browsers local storage, **v0.2.0**
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]

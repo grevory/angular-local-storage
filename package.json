@@ -1,6 +1,6 @@
 {
   "name": "angular-local-storage",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "An Angular module that gives you access to the browsers local storage",
   "homepage": "https://github.com/grevory/angular-local-storage",
   "main": "./dist/angular-local-storage.js",
