@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.1.5 - 2015-03-21
+ * @version v0.1.5 - 2015-05-10
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -15,8 +15,7 @@ var isDefined = angular.isDefined,
   isObject = angular.isObject,
   isArray = angular.isArray,
   extend = angular.extend,
-  toJson = angular.toJson,
-  fromJson = angular.fromJson;
+  toJson = angular.toJson;
 
 
 // Test if string is only contains numbers
@@ -136,7 +135,12 @@ angularLocalStorage.provider('localStorageService', function() {
       }
     }());
 
-
+    // Reviver function for JSON.parse that will be called
+    // for every key and value at every level of the final string -> JSON transformation
+    function reviver(key, value) {
+      if (value === 'true' || value === 'false') return value === 'true';
+      return value;
+    }
 
     // Directly adds a value to local storage
     // If local storage is not available in the browser use cookies
@@ -193,7 +197,7 @@ angularLocalStorage.provider('localStorageService', function() {
       }
 
       if (item.charAt(0) === "{" || item.charAt(0) === "[" || isStringNumber(item)) {
-        return fromJson(item);
+        return JSON.parse(item, reviver);
       }
 
       return item;
@@ -360,8 +364,7 @@ angularLocalStorage.provider('localStorageService', function() {
         if (thisCookie.indexOf(deriveQualifiedKey(key) + '=') === 0) {
           var storedValues = decodeURIComponent(thisCookie.substring(prefix.length + key.length + 1, thisCookie.length))
           try{
-            var obj = JSON.parse(storedValues);
-            return fromJson(obj)
+            return JSON.parse(storedValues, reviver);
           }catch(e){
             return storedValues
           }
