@@ -196,7 +196,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
 });
 ```
 ###remove
-Remove an item from local storage by key.<br/>
+Remove an item(s) from local storage by key.<br/>
 If local storage is not supported, use cookies instead.<br/>
 **Returns:** `Boolean`
 ```js
@@ -206,6 +206,9 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
    return localStorageService.remove(key);
   }
   //...
+  function removeItems(key1, key2, key3) {
+   return localStorageService.remove(key1, key2, key3);
+  }
 });
 ```
 ###clearAll

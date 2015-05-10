@@ -247,6 +247,16 @@ describe('localStorageService', function() {
     expectRemoving('ls.lorem.ipsum')
   ));
 
+  it('should be able to remove multiple items', inject(function($window, localStorageService) {
+    elmSpy = spyOn($window.localStorage, 'removeItem').andCallThrough();
+    localStorageService.remove('lorem.ipsum1', 'lorem.ipsum2', 'lorem.ipsum3');
+
+    expect(elmSpy.calls.length).toEqual(3);
+    expect(elmSpy).toHaveBeenCalledWith('ls.lorem.ipsum1');
+    expect(elmSpy).toHaveBeenCalledWith('ls.lorem.ipsum2');
+    expect(elmSpy).toHaveBeenCalledWith('ls.lorem.ipsum3');
+  }));
+
   it('should be able only to remove owned keys', inject(function($window, localStorageService) {
     localStorageService.set('appKey', 'appValue');
     $window.localStorage.setItem('appKey', 'appValue');
@@ -302,7 +312,7 @@ describe('localStorageService', function() {
       var spy = spyOn($rootScope, '$broadcast');
 
       localStorageService.set('a8m', 'foobar');
-      localStorageService.remove('a8m', 'foobar');
+      localStorageService.remove('a8m');
       expect(spy.callCount).toEqual(2);
     });
   });
