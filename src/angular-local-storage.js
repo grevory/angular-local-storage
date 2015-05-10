@@ -174,28 +174,35 @@ angularLocalStorage.provider('localStorageService', function() {
 
     // Remove an item from local storage
     // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
-    var removeFromLocalStorage = function (key) {
-      if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
-        if (!browserSupportsLocalStorage) {
-          $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
-        }
+    var removeFromLocalStorage = function () {
+      var i, key;
+      for (i=0; i<arguments.length; i++) {
+        key = arguments[i];
+        if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
+          if (!browserSupportsLocalStorage) {
+            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+          }
 
-        if (notify.removeItem) {
-          $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'cookie'});
+          if (notify.removeItem) {
+            $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'cookie'});
+          }
+          removeFromCookies(key);
         }
-        return removeFromCookies(key);
-      }
-
-      try {
-        webStorage.removeItem(deriveQualifiedKey(key));
-        if (notify.removeItem) {
-          $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: self.storageType});
+        else {
+          try {
+            webStorage.removeItem(deriveQualifiedKey(key));
+            if (notify.removeItem) {
+              $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {
+                key: key,
+                storageType: self.storageType
+              });
+            }
+          } catch (e) {
+            $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+            removeFromCookies(key);
+          }
         }
-      } catch (e) {
-        $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
-        return removeFromCookies(key);
       }
-      return true;
     };
 
     // Return array of keys for local storage
