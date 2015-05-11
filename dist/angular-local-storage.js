@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.2.0 - 2015-05-10
+ * @version v0.2.0 - 2015-05-11
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -196,7 +196,7 @@ angularLocalStorage.provider('localStorageService', function() {
         return null;
       }
 
-      if (item.charAt(0) === "{" || item.charAt(0) === "[" || isStringNumber(item)) {
+      if (item.charAt(0) === "{" || item.charAt(0) === "[" || isStringNumber(item) || item === "true" || item === "false") {
         return JSON.parse(item, reviver);
       }
 
