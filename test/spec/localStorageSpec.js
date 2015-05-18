@@ -143,7 +143,7 @@ describe('localStorageService', function() {
 
   it('should add key to localeStorage with initial prefix(ls)', inject(
     addItem('foo', 'bar'),
-    expectAdding('ls.foo', 'bar')
+    expectAdding('ls.foo', '"bar"')
   ));
 
   it('should add key to localeStorage null if value not provided', inject(
@@ -155,7 +155,7 @@ describe('localStorageService', function() {
     module(setPrefix('myApp'));
     inject(
       addItem('foo', 'bar'),
-      expectAdding('myApp.foo', 'bar')
+      expectAdding('myApp.foo', '"bar"')
     );
   });
 
@@ -163,7 +163,7 @@ describe('localStorageService', function() {
     module(setPrefix(''));
     inject(
       addItem('foo', 'bar'),
-      expectAdding('foo', 'bar')
+      expectAdding('foo', '"bar"')
     );
   });
 
@@ -205,6 +205,15 @@ describe('localStorageService', function() {
     );
   });
 
+  it('should be able to set and get objects contains boolean - issue #225', function() {
+    var t = {x: true, y: false};
+    inject(
+      addItem('key', t),
+      expectAdding('ls.key', angular.toJson(t)),
+      expectMatching('key', t)
+    );
+  });
+
   it('should be able to set and get integers', function() {
     inject(
       addItem('key', 777),
@@ -229,10 +238,26 @@ describe('localStorageService', function() {
     );
   });
 
+  it('should be able to set and get boolean-like strings', function() {
+    inject(
+      addItem('key', 'true'),
+      expectAdding('ls.key', angular.toJson('true')),
+      expectMatching('key', 'true')
+    );
+  });
+
+  it('should be able to set and get null-like strings', function() {
+    inject(
+      addItem('key', 'null'),
+      expectAdding('ls.key', angular.toJson('null')),
+      expectMatching('key', 'null')
+    );
+  });
+
   it('should be able to set and get strings', function() {
     inject(
       addItem('key', 'string'),
-      expectAdding('ls.key', 'string'),
+      expectAdding('ls.key', '"string"'),
       expectMatching('key', 'string')
     );
   });
@@ -457,7 +482,7 @@ describe('localStorageService', function() {
         expect(localStorageService.get('key' + l)).toEqual(null);
         expect($window.localStorage.getItem('key' + l)).toEqual(null);
         expect(localStorageService.get('otherKey' + l)).toEqual('val' + l);
-        expect($window.localStorage.getItem('otherKey' + l)).toEqual('val' + l);
+        expect($window.localStorage.getItem('otherKey' + l)).toEqual('"val' + l + '"');
       }
     });
   });
@@ -496,7 +521,7 @@ describe('localStorageService', function() {
         localStorageService.get('foo');
         localStorageService.remove('foo');
 
-        expect(setSpy).toHaveBeenCalledWith('ls.foo', 'bar');
+        expect(setSpy).toHaveBeenCalledWith('ls.foo', '"bar"');
         expect(getSpy).toHaveBeenCalledWith('ls.foo');
         expect(removeSpy).toHaveBeenCalledWith('ls.foo');
 
