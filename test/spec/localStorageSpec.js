@@ -205,8 +205,8 @@ describe('localStorageService', function() {
     );
   });
 
-  it('should be able to set and get objects contains boolean - issue #225', function() {
-    var t = {x: true, y: false};
+  it('should be able to set and get objects contains boolean-like strings - issue #225', function() {
+    var t = {x: 'true', y: 'false'};
     inject(
       addItem('key', t),
       expectAdding('ls.key', angular.toJson(t)),
