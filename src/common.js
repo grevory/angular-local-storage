@@ -8,10 +8,3 @@ var isDefined = angular.isDefined,
   isArray = angular.isArray,
   extend = angular.extend,
   toJson = angular.toJson;
-
-
-// Test if string is only contains numbers
-// e.g '1' => true, "'1'" => true
-function isStringNumber(num) {
-  return  /^-?\d+\.?\d*$/.test(num.replace(/["']/g, ''));
-}
