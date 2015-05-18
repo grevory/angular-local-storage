@@ -1,6 +1,14 @@
-<a name="0.2.0"></a>
-# 0.2.0 (2015-10-05)
+<a name="0.2.1"></a>
 
+# 0.2.1 (2015-18-05)
+- build v0.2.1
+- refac(common): remove depricate code
+- fix(localStorage): load/save objects #225
+- Fix for bug introduced in 0.2.0 boolean values that not in objects are not converted properly
+
+<a name="0.2.0"></a>
+
+# 0.2.0 (2015-10-05)
 
 ## Breaking Changes
 - build v0.2.0
