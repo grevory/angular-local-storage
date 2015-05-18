@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.2.0 - 2015-05-11
+ * @version v0.2.1 - 2015-05-18
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -16,14 +16,6 @@ var isDefined = angular.isDefined,
   isArray = angular.isArray,
   extend = angular.extend,
   toJson = angular.toJson;
-
-
-// Test if string is only contains numbers
-// e.g '1' => true, "'1'" => true
-function isStringNumber(num) {
-  return  /^-?\d+\.?\d*$/.test(num.replace(/["']/g, ''));
-}
-
 var angularLocalStorage = angular.module('LocalStorageModule', []);
 
 angularLocalStorage.provider('localStorageService', function() {
@@ -135,13 +127,6 @@ angularLocalStorage.provider('localStorageService', function() {
       }
     }());
 
-    // Reviver function for JSON.parse that will be called
-    // for every key and value at every level of the final string -> JSON transformation
-    function reviver(key, value) {
-      if (value === 'true' || value === 'false') return value === 'true';
-      return value;
-    }
-
     // Directly adds a value to local storage
     // If local storage is not available in the browser use cookies
     // Example use: localStorageService.add('library','angular');
@@ -149,7 +134,7 @@ angularLocalStorage.provider('localStorageService', function() {
       // Let's convert undefined values to null to get the value consistent
       if (isUndefined(value)) {
         value = null;
-      } else if (isObject(value) || isArray(value) || isNumber(+value || value)) {
+      } else {
         value = toJson(value);
       }
 
@@ -196,11 +181,7 @@ angularLocalStorage.provider('localStorageService', function() {
         return null;
       }
 
-      if (item.charAt(0) === "{" || item.charAt(0) === "[" || isStringNumber(item) || item === "true" || item === "false") {
-        return JSON.parse(item, reviver);
-      }
-
-      return item;
+      return JSON.parse(item);
     };
 
     // Remove an item from local storage
@@ -370,9 +351,9 @@ angularLocalStorage.provider('localStorageService', function() {
         }
         if (thisCookie.indexOf(deriveQualifiedKey(key) + '=') === 0) {
           var storedValues = decodeURIComponent(thisCookie.substring(prefix.length + key.length + 1, thisCookie.length))
-          try{
-            return JSON.parse(storedValues, reviver);
-          }catch(e){
+          try {
+            return JSON.parse(storedValues);
+          } catch(e) {
             return storedValues
           }
         }
