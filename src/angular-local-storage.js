@@ -170,7 +170,7 @@ angularLocalStorage.provider('localStorageService', function() {
         return null;
       }
 
-      if (item.charAt(0) === "{" || item.charAt(0) === "[" || isStringNumber(item)) {
+      if (item.charAt(0) === "{" || item.charAt(0) === "[" || isStringNumber(item) || item === "true" || item === "false") {
         return JSON.parse(item, reviver);
       }
 

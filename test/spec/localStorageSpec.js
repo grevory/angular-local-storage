@@ -221,6 +221,14 @@ describe('localStorageService', function() {
     );
   });
 
+  it('should be able to set and get booleans', function() {
+    inject(
+        addItem('key', true),
+        expectAdding('ls.key', angular.toJson(true)),
+        expectMatching('key', true)
+    );
+  });
+
   it('should be able to set and get strings', function() {
     inject(
       addItem('key', 'string'),
