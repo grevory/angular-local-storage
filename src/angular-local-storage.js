@@ -163,7 +163,11 @@ angularLocalStorage.provider('localStorageService', function() {
         return null;
       }
 
-      return JSON.parse(item);
+      try {
+        return JSON.parse(item);
+      } catch (e) {
+        return item;
+      }
     };
 
     // Remove an item from local storage

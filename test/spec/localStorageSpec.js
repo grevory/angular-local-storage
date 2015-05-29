@@ -500,6 +500,19 @@ describe('localStorageService', function() {
     });
   }));
 
+  // Backward compatibility issue-#230
+  it('should return the item as-is if the parsing fail', inject(function($window, localStorageService) {
+    var items = ['{', '[', 'foo'];
+    //set keys
+    items.forEach(function(item, i) {
+      $window.localStorage.setItem('ls.' + i, item);
+    });
+
+    items.forEach(function(item, i) {
+      expect(localStorageService.get(i)).toEqual(item);
+    });
+  }));
+
   //sessionStorage
   describe('SessionStorage', function() {
 
