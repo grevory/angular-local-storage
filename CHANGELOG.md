@@ -7,6 +7,8 @@
 <a name="0.2.1"></a>
 
 # 0.2.1 (2015-18-05)
+
+## Breaking Changes
 - build v0.2.1
 - refac(common): remove depricate code
 - fix(localStorage): load/save objects #225
