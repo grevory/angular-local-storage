@@ -1,3 +1,9 @@
+<a name="0.2.2"></a>
+
+# 0.2.2 (2015-29-05)
+- build v0.2.2
+- fix(localStorage): parsing safety #230
+
 <a name="0.2.1"></a>
 
 # 0.2.1 (2015-18-05)
