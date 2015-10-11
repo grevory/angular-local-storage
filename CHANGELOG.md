@@ -1,12 +1,19 @@
+<a name="0.2.3"></a>
+
+# 0.2.3 (2015-10-11)
+- build v0.2.2
+- Fixed jshint isuses
+- Updated mixed-up dates in change log
+
 <a name="0.2.2"></a>
 
-# 0.2.2 (2015-29-05)
+# 0.2.2 (2015-05-29)
 - build v0.2.2
 - fix(localStorage): parsing safety #230
 
 <a name="0.2.1"></a>
 
-# 0.2.1 (2015-18-05)
+# 0.2.1 (2015-05-18)
 
 ## Breaking Changes
 - build v0.2.1
@@ -16,7 +23,7 @@
 
 <a name="0.2.0"></a>
 
-# 0.2.0 (2015-10-05)
+# 0.2.0 (2015-05-10)
 
 ## Breaking Changes
 - build v0.2.0
