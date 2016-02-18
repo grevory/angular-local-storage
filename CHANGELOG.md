@@ -1,7 +1,18 @@
+<a name="0.2.4"></a>
+
+# 0.2.4 (2015-02-18)
+- build v0.2.4
+- Fixed jshint isuses
+- added UMD support #273
+- fixed broken tests
+- updated bower and npm dependencies
+- added .editorconfig file
+- updated LICENSE #268
+
 <a name="0.2.3"></a>
 
 # 0.2.3 (2015-10-11)
-- build v0.2.2
+- build v0.2.3
 - Fixed jshint isuses
 - Updated mixed-up dates in change log
 
