@@ -6,21 +6,21 @@ describe('localStorageService', function() {
   //Actions
   function getItem(key) {
     return function($window, localStorageService) {
-      elmSpy = spyOn($window.localStorage, 'getItem').andCallThrough();
+      elmSpy = spyOn($window.localStorage, 'getItem').and.callThrough();
       localStorageService.get(key);
     };
   }
 
   function addItem(key, value) {
     return function($window, localStorageService) {
-      elmSpy = spyOn($window.localStorage, 'setItem').andCallThrough();
+      elmSpy = spyOn($window.localStorage, 'setItem').and.callThrough();
       localStorageService.set(key, value);
     };
   }
 
   function removeItem(key) {
     return function($window, localStorageService) {
-      elmSpy = spyOn($window.localStorage, 'removeItem').andCallThrough();
+      elmSpy = spyOn($window.localStorage, 'removeItem').and.callThrough();
       localStorageService.remove(key);
     };
   }
@@ -190,89 +190,89 @@ describe('localStorageService', function() {
   it('should be able to set and get arrays', function() {
     var values = ['foo', 'bar', 'baz'];
     inject(
-      addItem('key', values),
-      expectAdding('ls.key', angular.toJson(values)),
-      expectMatching('key', values)
+      addItem('appKey', values),
+      expectAdding('ls.appKey', angular.toJson(values)),
+      expectMatching('appKey', values)
     );
   });
 
   it('should be able to set and get objects', function() {
     var values = { 0: 'foo', 1: 'bar', 2: 'baz' };
     inject(
-      addItem('key', values),
-      expectAdding('ls.key', angular.toJson(values)),
-      expectMatching('key', values)
+      addItem('appKey', values),
+      expectAdding('ls.appKey', angular.toJson(values)),
+      expectMatching('appKey', values)
     );
   });
 
   it('should be able to set and get objects contains boolean-like strings - issue #225', function() {
     var t = {x: 'true', y: 'false'};
     inject(
-      addItem('key', t),
-      expectAdding('ls.key', angular.toJson(t)),
-      expectMatching('key', t)
+      addItem('appKey', t),
+      expectAdding('ls.appKey', angular.toJson(t)),
+      expectMatching('appKey', t)
     );
   });
 
   it('should be able to set and get integers', function() {
     inject(
-      addItem('key', 777),
-      expectAdding('ls.key', angular.toJson(777)),
-      expectMatching('key', 777)
+      addItem('appKey', 777),
+      expectAdding('ls.appKey', angular.toJson(777)),
+      expectMatching('appKey', 777)
     );
   });
 
   it('should be able to set and get float numbers', function() {
     inject(
-      addItem('key', 123.123),
-      expectAdding('ls.key', angular.toJson(123.123)),
-      expectMatching('key', 123.123)
+      addItem('appKey', 123.123),
+      expectAdding('ls.appKey', angular.toJson(123.123)),
+      expectMatching('appKey', 123.123)
     );
   });
 
   it('should be able to set and get booleans', function() {
     inject(
-        addItem('key', true),
-        expectAdding('ls.key', angular.toJson(true)),
-        expectMatching('key', true)
+        addItem('appKey', true),
+        expectAdding('ls.appKey', angular.toJson(true)),
+        expectMatching('appKey', true)
     );
   });
 
   it('should be able to set and get boolean-like strings', function() {
     inject(
-      addItem('key', 'true'),
-      expectAdding('ls.key', angular.toJson('true')),
-      expectMatching('key', 'true')
+      addItem('appKey', 'true'),
+      expectAdding('ls.appKey', angular.toJson('true')),
+      expectMatching('appKey', 'true')
     );
   });
 
   it('should be able to set and get null-like strings', function() {
     inject(
-      addItem('key', 'null'),
-      expectAdding('ls.key', angular.toJson('null')),
-      expectMatching('key', 'null')
+      addItem('appKey', 'null'),
+      expectAdding('ls.appKey', angular.toJson('null')),
+      expectMatching('appKey', 'null')
     );
   });
 
   it('should be able to set and get strings', function() {
     inject(
-      addItem('key', 'string'),
-      expectAdding('ls.key', '"string"'),
-      expectMatching('key', 'string')
+      addItem('appKey', 'string'),
+      expectAdding('ls.appKey', '"string"'),
+      expectMatching('appKey', 'string')
     );
   });
 
   it('should be able to set and get numbers as a strings', function() {
     inject(
-      addItem('key', '777'),
-      expectAdding('ls.key', angular.toJson('777')),
-      expectMatching('key', '777')
-    )
+      addItem('appKey', '777'),
+      expectAdding('ls.appKey', angular.toJson('777')),
+      expectMatching('appKey', '777')
+    );
   });
 
   it('should be able to get items', inject(
-    getItem('key'),
-    expectGetting('ls.key')
+    getItem('appKey'),
+    expectGetting('ls.appKey')
   ));
 
   it('should be able to remove items', inject(
@@ -281,10 +281,10 @@ describe('localStorageService', function() {
   ));
 
   it('should be able to remove multiple items', inject(function($window, localStorageService) {
-    elmSpy = spyOn($window.localStorage, 'removeItem').andCallThrough();
+    elmSpy = spyOn($window.localStorage, 'removeItem').and.callThrough();
     localStorageService.remove('lorem.ipsum1', 'lorem.ipsum2', 'lorem.ipsum3');
 
-    expect(elmSpy.calls.length).toEqual(3);
+    expect(elmSpy.calls.count()).toEqual(3);
     expect(elmSpy).toHaveBeenCalledWith('ls.lorem.ipsum1');
     expect(elmSpy).toHaveBeenCalledWith('ls.lorem.ipsum2');
     expect(elmSpy).toHaveBeenCalledWith('ls.lorem.ipsum3');
@@ -299,7 +299,7 @@ describe('localStorageService', function() {
 
     localStorageService.remove('appKey');
 
-    expect($window.localStorage.getItem('ls.appKey')).not.toBeDefined();
+    expect($window.localStorage.getItem('ls.appKey')).toBeNull();
     expect($window.localStorage.getItem('appKey')).toBeDefined();
   }));
 
@@ -312,7 +312,7 @@ describe('localStorageService', function() {
 
       localStorageService.remove('appKey');
 
-      expect($window.localStorage.getItem('appKey')).not.toBeDefined();
+      expect($window.localStorage.getItem('appKey')).toBeNull();
     });
   });
 
@@ -346,7 +346,7 @@ describe('localStorageService', function() {
 
       localStorageService.set('a8m', 'foobar');
       localStorageService.remove('a8m');
-      expect(spy.callCount).toEqual(2);
+      expect(spy.calls.count()).toEqual(2);
     });
   });
 
@@ -409,7 +409,7 @@ describe('localStorageService', function() {
     var expectation = [true, true, false, false, false];
     var results = [];
 
-    spyOn($rootScope, '$watch').andCallFake(function(key, func, eq) {
+    spyOn($rootScope, '$watch').and.callFake(function(key, func, eq) {
       results.push(eq);
     });
 
@@ -442,7 +442,7 @@ describe('localStorageService', function() {
     localStorageService.clearAll();
     //remove only owned keys
     for(var l = 0; l < 10; l++) {
-      expect(localStorageService.get('key' + l)).toEqual(null);
+      expect(localStorageService.get('key' + l)).toBeNull();
       expect($window.localStorage.getItem('key' + l)).toEqual('val' + l);
     }
   }));
@@ -458,9 +458,11 @@ describe('localStorageService', function() {
 
     localStorageService.clearAll(/^key/);
 
+    expect(localStorageService.get('keyAlpha')).toBeNull();
+
     //remove only owned keys that follow RegExp
     for(var l = 0; l < 10; l++) {
-      expect(localStorageService.get('key' + l)).toEqual(null);
+      expect(localStorageService.get('key' + l)).toBeNull();
       expect($window.localStorage.getItem('key' + l)).toEqual('val' + l);
       expect(localStorageService.get('otherKey' + l)).toEqual('val' + l);
       expect($window.localStorage.getItem('otherKey' + l)).toEqual('val' + l);
@@ -477,10 +479,13 @@ describe('localStorageService', function() {
       localStorageService.set('keyAlpha', 'val');
 
       localStorageService.clearAll(/^key/);
-      
+
+      expect(localStorageService.get('keyAlpha')).toBeNull();
+      expect($window.localStorage.getItem('keyAlpha')).toBeNull();
+
       for(var l = 0; l < 10; l++) {
-        expect(localStorageService.get('key' + l)).toEqual(null);
-        expect($window.localStorage.getItem('key' + l)).toEqual(null);
+        expect(localStorageService.get('key' + l)).toBeNull();
+        expect($window.localStorage.getItem('key' + l)).toBeNull();
         expect(localStorageService.get('otherKey' + l)).toEqual('val' + l);
         expect($window.localStorage.getItem('otherKey' + l)).toEqual('"val' + l + '"');
       }
@@ -630,9 +635,9 @@ describe('localStorageService', function() {
 
     it('should be able to clear all owned keys from cookie', inject(function(localStorageService, $document) {
       localStorageService.set('ownKey1', 1);
-      $document.cookie = "username=John Doe";
+      $document.cookie = 'username=John Doe';
       localStorageService.clearAll();
-      expect(localStorageService.get('ownKey1')).toEqual(null);
+      expect(localStorageService.get('ownKey1')).toBeNull();
       expect($document.cookie).not.toEqual('');
     }));
 

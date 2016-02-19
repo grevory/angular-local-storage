@@ -26,8 +26,19 @@ module.exports = function(grunt) {
     concat: {
       options: {
         banner: '<%= meta.banner %>' + '\n' +
-          '(function ( window, angular, undefined ) {' + '\n',
-        footer: '})( window, window.angular );'
+        "(function (factory) {\n" +
+        "  if (typeof define === 'function' && define.amd) {\n" +
+        "    define(['exports', 'angular'], factory);\n" +
+        "  } else if (typeof module === 'object' && typeof module.exports === 'object') {\n" +
+        "    factory(module.exports, require('angular'));\n" +
+        "  } else if (typeof angular !== 'undefined') {\n" +
+        "    root = (typeof root !== 'undefined') ? root : {};\n" +
+        "    factory((root.exports || (root.exports = {})), angular);\n" +
+        "  } else {\n" +
+        "    throw new Error('Unable to initialize angular-local-storage');\n" +
+        "  }\n" +
+        "})(function(exports, angular) {\n",
+        footer: '});'
       },
       dist: {
         src: ['src/common.js', 'src/angular-local-storage.js'],
@@ -71,6 +82,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('test', [
+    'concat',
     'karma'
   ]);
 

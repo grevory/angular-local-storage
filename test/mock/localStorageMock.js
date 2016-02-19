@@ -12,7 +12,7 @@ function localStorageMock() {
     },
     getItem: {
       value: function(key) {
-        return storage[key];
+        return storage[key] ? storage[key] : null;
       },
       enumerable: false,
       writable: true

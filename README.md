@@ -1,6 +1,6 @@
 angular-local-storage
 =====================
-An Angular module that gives you access to the browsers local storage, **v0.2.1**
+An Angular module that gives you access to the browsers local storage
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
@@ -61,7 +61,7 @@ When you're done, your setup should look similar to the following:
 <!doctype html>
 <html ng-app="myApp">
 <head>
-   
+
 </head>
 <body>
     ...
@@ -238,7 +238,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   localStorageService.set('property', 'oldValue');
   $scope.unbind = localStorageService.bind($scope, 'property');
-  
+
   //Test Changes
   $scope.update = function(val) {
     $scope.property = val;
@@ -354,7 +354,7 @@ Check out the full demo at http://gregpike.net/demos/angular-local-storage/demo.
 * Don't forget about tests.
 * If you planning add some feature please create issue before.
 
-Clone the project: 
+Clone the project:
 ```sh
 $ git clone https://github.com/<your-repo>/angular-local-storage.git
 $ npm install
