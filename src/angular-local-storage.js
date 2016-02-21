@@ -389,7 +389,7 @@ angular
           if (value === null && isDefined(def)) {
             value = def;
           } else if (isObject(value) && isObject(def)) {
-            value = extend(def, value);
+            value = extend(value, def);
           }
 
           $parse(key).assign(scope, value);

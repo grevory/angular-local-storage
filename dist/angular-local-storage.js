@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.2.4 - 2016-02-21
+ * @version v0.2.4 - 2016-02-22
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -408,7 +408,7 @@ angular
           if (value === null && isDefined(def)) {
             value = def;
           } else if (isObject(value) && isObject(def)) {
-            value = extend(def, value);
+            value = extend(value, def);
           }
 
           $parse(key).assign(scope, value);
