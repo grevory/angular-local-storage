@@ -379,11 +379,11 @@ angular
           lsKey = lsKey || key;
           var value = getFromLocalStorage(lsKey);
 
-      if (value === null && isDefined(def)) {
-        value = def;
-      } else if (isObject(value) && isObject(def)) {
-        value = extend(value, def);
-      }
+          if (value === null && isDefined(def)) {
+            value = def;
+          } else if (isObject(value) && isObject(def)) {
+            value = extend(def, value);
+          }
 
           $parse(key).assign(scope, value);
 

@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.2.4 - 2016-02-19
+ * @version v0.2.4 - 2016-02-21
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -17,6 +17,7 @@
     throw new Error('Unable to initialize angular-local-storage');
   }
 })(function(exports, angular) {
+exports = 'LocalStorageModule';
 /*jshint globalstrict:true*/
 'use strict';
 
