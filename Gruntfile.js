@@ -37,12 +37,11 @@ module.exports = function(grunt) {
         "  } else {\n" +
         "    throw new Error('Unable to initialize angular-local-storage');\n" +
         "  }\n" +
-        "})(function(exports, angular) {\n" +
-        "exports = 'LocalStorageModule';\n",
+        "})(function(exports, angular) {\n",
         footer: '});'
       },
       dist: {
-        src: ['src/common.js', 'src/angular-local-storage.js'],
+        src: ['src/angular-local-storage.js'],
         dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
       }
     },

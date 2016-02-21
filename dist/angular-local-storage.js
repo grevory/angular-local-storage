@@ -17,10 +17,6 @@
     throw new Error('Unable to initialize angular-local-storage');
   }
 })(function(exports, angular) {
-exports = 'LocalStorageModule';
-/*jshint globalstrict:true*/
-'use strict';
-
 var isDefined = angular.isDefined,
   isUndefined = angular.isUndefined,
   isNumber = angular.isNumber,
