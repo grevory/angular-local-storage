@@ -1,3 +1,10 @@
+var isDefined = angular.isDefined,
+  isUndefined = angular.isUndefined,
+  isNumber = angular.isNumber,
+  isObject = angular.isObject,
+  isArray = angular.isArray,
+  extend = angular.extend,
+  toJson = angular.toJson;
 
 angular
   .module('LocalStorageModule', [])
@@ -379,11 +386,11 @@ angular
           lsKey = lsKey || key;
           var value = getFromLocalStorage(lsKey);
 
-      if (value === null && isDefined(def)) {
-        value = def;
-      } else if (isObject(value) && isObject(def)) {
-        value = extend(value, def);
-      }
+          if (value === null && isDefined(def)) {
+            value = def;
+          } else if (isObject(value) && isObject(def)) {
+            value = extend(value, def);
+          }
 
           $parse(key).assign(scope, value);
 
