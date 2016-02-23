@@ -1,22 +1,11 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.2.4 - 2016-02-22
+ * @version v0.2.5 - 2016-02-23
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-(function (factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['exports', 'angular'], factory);
-  } else if (typeof module === 'object' && typeof module.exports === 'object') {
-    factory(module.exports, require('angular'));
-  } else if (typeof angular !== 'undefined') {
-    root = (typeof root !== 'undefined') ? root : {};
-    factory((root.exports || (root.exports = {})), angular);
-  } else {
-    throw new Error('Unable to initialize angular-local-storage');
-  }
-})(function(exports, angular) {
+(function (window, angular) {
 var isDefined = angular.isDefined,
   isUndefined = angular.isUndefined,
   isNumber = angular.isNumber,
@@ -454,4 +443,4 @@ angular
         };
       }];
   });
-});
+})(window, window.angular);

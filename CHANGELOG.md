@@ -1,3 +1,11 @@
+<a name="0.2.5"></a>
+
+# 0.2.5 (2015-02-23)
+- build v0.2.5
+- bug: revert UMD support due to breaking changes  (#288, #289, #290)
+- bug: fix extend (PR #286)
+- chore: fix typos in CHANGELOG
+
 <a name="0.2.4"></a>
 
 # 0.2.4 (2015-02-18)
