@@ -1,6 +1,6 @@
 {
   "name": "angular-local-storage",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "An Angular module that gives you access to the browsers local storage",
   "homepage": "https://github.com/grevory/angular-local-storage",
   "main": "./index.js",
@@ -30,6 +30,7 @@
     "grunt-contrib-jshint": "~0.12.0",
     "grunt-contrib-uglify": "*",
     "grunt-karma": "latest",
+    "jasmine-core": "^2.4.1",
     "karma": "~0.13.19",
     "karma-coverage": "^0.5.3",
     "karma-jasmine": "~0.3.7",
