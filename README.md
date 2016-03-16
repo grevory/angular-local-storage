@@ -367,8 +367,9 @@ $ grunt test
 **Deploy:**<br/>
 Run the build task, update version before(bower,package)
 ```sh
+$ npm version patch|minor|major
 $ grunt dist
-$ git tag 0.*.*
+$ git commit [message]
 $ git push origin master --tags
 ```
 
