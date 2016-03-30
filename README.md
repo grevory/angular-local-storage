@@ -40,7 +40,7 @@ An Angular module that gives you access to the browsers local storage
     - [clearAll](#cookieclearall)
 
 ##Get Started
-**(1)** You can install angular-local-storage using 2 different ways:<br/>
+**(1)** You can install angular-local-storage using 3 different ways:<br/>
 **Git:**
 clone & build [this](https://github.com/grevory/angular-local-storage.git) repository<br/>
 **Bower:**
