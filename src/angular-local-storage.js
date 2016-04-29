@@ -92,6 +92,12 @@ angular
       var deriveQualifiedKey = function(key) {
         return prefix + key;
       };
+      
+      // Removes prefix from the key.
+      var underiveQualifiedKey = function (key) {
+        return key.replace(new RegExp('^' + prefix, 'g'), '');
+      };
+      
       // Checks the browser to see if local storage is supported
       var browserSupportsLocalStorage = (function () {
         try {
@@ -399,6 +405,28 @@ angular
             addToLocalStorage(lsKey, newVal);
           }, isObject(scope[key]));
         };
+
+        // Add listener to local storage, for update callbacks.
+        if (browserSupportsLocalStorage) {
+            if (window.addEventListener) {
+                window.addEventListener("storage", handleStorageChangeCallback, false);
+            } else {
+                window.attachEvent("onstorage", handleStorageChangeCallback);
+            };
+        }
+
+        // Callback handler for storage changed.
+        function handleStorageChangeCallback(e) {
+            if (!e) { e = window.event; }
+            if (notify.setItem) {
+                if (isKeyPrefixOurs(key)) {
+                    var key = underiveQualifiedKey(e.key);
+                    $timeout(function () {
+                        $rootScope.$broadcast('LocalStorageModule.notification.changed', { key: key, newvalue: e.newValue, storageType: self.storageType });
+                    });
+                }
+            }
+        }
 
         // Return localStorageService.length
         // ignore keys that not owned
