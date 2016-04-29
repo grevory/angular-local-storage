@@ -70,7 +70,7 @@ angular
       return this;
     };
 
-    this.$get = ['$rootScope', '$window', '$document', '$parse', function($rootScope, $window, $document, $parse) {
+    this.$get = ['$rootScope', '$window', '$document', '$parse','$timeout', function($rootScope, $window, $document, $parse, $timeout) {
       var self = this;
       var prefix = self.prefix;
       var cookie = self.cookie;
