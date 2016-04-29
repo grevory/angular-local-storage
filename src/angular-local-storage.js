@@ -29,6 +29,9 @@ angular
       path: '/'
     };
 
+    // Decides wether we should default to cookies if localstorage is not supported.
+    this.defaultToCookie = true;
+      
     // Send signals for each of the following actions?
     this.notify = {
       setItem: true,
@@ -46,7 +49,11 @@ angular
       this.storageType = storageType;
       return this;
     };
-
+    // Setter for defaultToCookie value, default is true.
+    this.setDefaultToCookie = function (shouldDefault) {
+      this.defaultToCookie = !!shouldDefault; // Double-not to make sure it's a bool value.
+      return this;
+    };
     // Setter for cookie config
     this.setStorageCookie = function(exp, path) {
       this.cookie.expiry = exp;
@@ -98,6 +105,11 @@ angular
         return key.replace(new RegExp('^' + prefix, 'g'), '');
       };
       
+      // Check if the key is within our prefix namespace.
+      var isKeyPrefixOurs = function (key) {
+        return key.startsWith(prefix) !== -1;
+      }
+      
       // Checks the browser to see if local storage is supported
       var browserSupportsLocalStorage = (function () {
         try {
@@ -117,7 +129,9 @@ angular
 
           return supported;
         } catch (e) {
-          storageType = 'cookie';
+          // Only change storageType to cookies if defaulting is enabled.
+          if (self.defaultToCookie)
+            storageType = 'cookie';
           $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
           return false;
         }
@@ -135,7 +149,7 @@ angular
         }
 
         // If this browser does not support local storage use cookies
-        if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
+        if (!browserSupportsLocalStorage  && self.defaultToCookie  || self.storageType === 'cookie') {
           if (!browserSupportsLocalStorage) {
             $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
           }
@@ -164,7 +178,7 @@ angular
       // Example use: localStorageService.get('library'); // returns 'angular'
       var getFromLocalStorage = function (key) {
 
-        if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
+        if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
           if (!browserSupportsLocalStorage) {
             $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
           }
@@ -192,7 +206,7 @@ angular
         var i, key;
         for (i=0; i<arguments.length; i++) {
           key = arguments[i];
-          if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
+          if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
             if (!browserSupportsLocalStorage) {
               $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
             }
@@ -255,13 +269,14 @@ angular
         var prefixRegex = !!prefix ? new RegExp('^' + prefix) : new RegExp();
         var testRegex = !!regularExpression ? new RegExp(regularExpression) : new RegExp();
 
-        if (!browserSupportsLocalStorage || self.storageType === 'cookie') {
+        if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
           if (!browserSupportsLocalStorage) {
             $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
           }
           return clearAllFromCookies();
         }
-
+        if (!browserSupportsLocalStorage && !self.defaultToCookie)
+          return false;
         var prefixLength = prefix.length;
 
         for (var key in webStorage) {
