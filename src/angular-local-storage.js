@@ -436,6 +436,7 @@ angular
             if (notify.setItem) {
                 if (isKeyPrefixOurs(key)) {
                     var key = underiveQualifiedKey(e.key);
+                    // Use timeout, to avoid using $rootScope.$apply.
                     $timeout(function () {
                         $rootScope.$broadcast('LocalStorageModule.notification.changed', { key: key, newvalue: e.newValue, storageType: self.storageType });
                     });
