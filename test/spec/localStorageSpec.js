@@ -743,7 +743,7 @@ describe('localStorageService', function () {
             expect($window.addEventListener.calls.mostRecent().args[2]).toEqual(false);
         }));
 
-        it('should call $window.addEventListener if storage is supported and notify.setitem is true', inject(function ($window, localStorageService, $rootScope) {
+        it('localStorageChanged should call $broadcast', inject(function ($window, localStorageService, $rootScope) {
             var spy = spyOn($rootScope, '$broadcast');
             var event = {
                 key: localStorageService.deriveKey('foo'),
