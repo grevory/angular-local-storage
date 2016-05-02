@@ -469,6 +469,7 @@ angular
           bind: bindToScope,
           deriveKey: deriveQualifiedKey,
           length: lengthOfLocalStorage,
+          defaultToCookie: this.defaultToCookie,
           cookie: {
             isSupported: browserSupportsCookies,
             set: addToCookies,
