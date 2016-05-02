@@ -199,6 +199,13 @@ describe('localStorageService', function () {
         });
     });
 
+    it('should be able to return the underivedkey', function () {
+        module(setPrefix('myApp'));
+        inject(function (localStorageService) {
+            expect(localStorageService.underiveKey('myApp.foo')).toEqual('foo');
+        });
+    });
+
     it('should be able to set and get arrays', function () {
         var values = ['foo', 'bar', 'baz'];
         inject(
@@ -734,6 +741,11 @@ describe('localStorageService', function () {
             });
             $provide.value('$window', window);
             $provide.value('$timeout', function (fn) { fn() });
+            module(function (localStorageServiceProvider) {
+                localStorageServiceProvider
+                  .setPrefix('test')
+                  .setNotify(true, true);
+            });
         }));
 
         it('should call $window.addEventListener if storage is supported and notify.setitem is true', inject(function ($window, localStorageService) {

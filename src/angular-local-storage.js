@@ -467,6 +467,7 @@ angular
           clearAll: clearAllFromLocalStorage,
           bind: bindToScope,
           deriveKey: deriveQualifiedKey,
+          underiveKey: underiveQualifiedKey,
           length: lengthOfLocalStorage,
           defaultToCookie: this.defaultToCookie,
           cookie: {
