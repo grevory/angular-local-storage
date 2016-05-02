@@ -114,7 +114,7 @@ angular
       
       // Check if the key is within our prefix namespace.
       var isKeyPrefixOurs = function (key) {
-        return key.startsWith(prefix) !== -1;
+        return key.indexOf(prefix) === 0;
       }
       
       // Checks the browser to see if local storage is supported
@@ -441,8 +441,8 @@ angular
         function handleStorageChangeCallback(e) {
             if (!e) { e = $window.event; }
             if (notify.setItem) {
-                var key = underiveQualifiedKey(e.key);
-                if (isKeyPrefixOurs(key)) {
+                if (isKeyPrefixOurs(e.key)) {
+                    var key = underiveQualifiedKey(e.key);
                     // Use timeout, to avoid using $rootScope.$apply.
                     $timeout(function () {
                         $rootScope.$broadcast('LocalStorageModule.notification.changed', { key: key, newvalue: e.newValue, storageType: self.storageType });
