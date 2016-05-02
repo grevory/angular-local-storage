@@ -422,16 +422,16 @@ angular
 
         // Add listener to local storage, for update callbacks.
         if (browserSupportsLocalStorage) {
-            if (window.addEventListener) {
-                window.addEventListener("storage", handleStorageChangeCallback, false);
-            } else {
-                window.attachEvent("onstorage", handleStorageChangeCallback);
+            if ($window.addEventListener) {
+                $window.addEventListener("storage", handleStorageChangeCallback, false);
+            } else if($window.attachEvent){
+                $window.attachEvent("onstorage", handleStorageChangeCallback);
             };
         }
 
         // Callback handler for storage changed.
         function handleStorageChangeCallback(e) {
-            if (!e) { e = window.event; }
+            if (!e) { e = $window.event; }
             if (notify.setItem) {
                 var key = underiveQualifiedKey(e.key);
                 if (isKeyPrefixOurs(key)) {

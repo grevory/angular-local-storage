@@ -699,17 +699,15 @@ describe('localStorageService', function () {
 
     //setDefaultToCookie
     describe('setDefaultToCookie', function () {
-        
+
         beforeEach(module('LocalStorageModule', function ($provide) {
             $provide.value('$window', {
-
-            });
-            $provide.value('$document', {
-
+                localStorage: false,
+                sessionStorage: false,
             });
         }));
 
-        it('should by default be enabled', inject( 
+        it('should by default be enabled', inject(
           expectDefaultToCookieSupporting(true)
         ));
 
@@ -717,6 +715,48 @@ describe('localStorageService', function () {
             module(setDefaultToCookie(false));
             inject(expectDefaultToCookieSupporting(false));
         });
+
+        it('should not default to cookies', function () {
+            module(setDefaultToCookie(false));
+            inject(expectSupporting(false));
+            inject(expectStorageTyping('localStorage'));
+        });
     });
+
+    //localStorageChanged
+    describe('localStorageChanged', function () {
+        var listeners = {}, scope = null;
+        beforeEach(module('LocalStorageModule', function ($provide) {
+            var window = jasmine.createSpyObj('$window', ['addEventListener']);
+            window.localStorage = localStorageMock();
+            window.addEventListener.and.callFake(function (event, listener) {
+                listeners[event] = listener;
+            });
+            $provide.value('$window', window);
+            $provide.value('$timeout', function (fn) { fn() });
+        }));
+
+        it('should call $window.addEventListener if storage is supported and notify.setitem is true', inject(function ($window, localStorageService) {
+            expect($window.addEventListener).toHaveBeenCalled();
+            expect($window.addEventListener.calls.mostRecent().args[0] === 'storage').toBeTruthy();
+            expect($window.addEventListener.calls.mostRecent().args[1] instanceof Function).toBeTruthy();
+            expect($window.addEventListener.calls.mostRecent().args[2]).toEqual(false);
+        }));
+
+        it('should call $window.addEventListener if storage is supported and notify.setitem is true', inject(function ($window, localStorageService, $rootScope) {
+            var spy = spyOn($rootScope, '$broadcast');
+            var event = {
+                key: localStorageService.deriveKey('foo'),
+                newValue: 'bar'
+            };
+            listeners.storage(event);
+
+            expect(spy).toHaveBeenCalled();
+            expect(spy.calls.mostRecent().args[0] === 'LocalStorageModule.notification.changed').toBeTruthy();
+            expect(spy.calls.mostRecent().args[1].key === 'foo').toBeTruthy();
+            expect(spy.calls.mostRecent().args[1].newvalue === 'bar').toBeTruthy();
+        }));
+    });
+
 
 });
