@@ -1,4 +1,3 @@
-(function () {
 var isDefined = angular.isDefined,
   isUndefined = angular.isUndefined,
   isNumber = angular.isNumber,
@@ -481,4 +480,4 @@ angular
         };
       }];
   });
-})();
+
