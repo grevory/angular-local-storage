@@ -17,6 +17,7 @@ An Angular module that gives you access to the browsers local storage
 - [Configuration](#configuration)
  - [setPrefix](#setprefix)
  - [setStorageType](#setstoragetype)
+ - [setDefaultToCookie](#setdefaulttocookie)
  - [setStorageCookie](#setstoragecookie)
  - [setStorageCookieDomain](#setstoragecookiedomain)
  - [setNotify](#setnotify)
@@ -93,6 +94,15 @@ You could change web storage type to localStorage or sessionStorage<br/>
 myApp.config(function (localStorageServiceProvider) {
   localStorageServiceProvider
     .setStorageType('sessionStorage');
+});
+```
+###setDefaultToCookie
+If localStorage is not supported, the library will default to cookies instead. This behavior can be disabled.<br/>
+**Default:** `true`
+```js
+myApp.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setDefaultToCookie(false);
 });
 ```
 ###setStorageCookie
