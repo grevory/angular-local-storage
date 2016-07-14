@@ -141,9 +141,7 @@ angular
       // If local storage is not available in the browser use cookies
       // Example use: localStorageService.add('library','angular');
       var addToLocalStorage = function (key, value, type) {
-        if (type) {
-          setStorageType(type);
-        }
+        setStorageType(type);
         
         // Let's convert undefined values to null to get the value consistent
         if (isUndefined(value)) {
@@ -181,9 +179,7 @@ angular
       // Directly get a value from local storage
       // Example use: localStorageService.get('library'); // returns 'angular'
       var getFromLocalStorage = function (key, type) {
-        if (type) {
-          setStorageType(type);
-        }
+        setStorageType(type);
 
         if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
           if (!browserSupportsLocalStorage) {
@@ -256,9 +252,7 @@ angular
       // Return array of keys for local storage
       // Example use: var keys = localStorageService.keys()
       var getKeysForLocalStorage = function (type) {
-        if (type) {
-          setStorageType(type);
-        }
+        setStorageType(type);
         
         if (!browserSupportsLocalStorage) {
           $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
@@ -286,9 +280,7 @@ angular
       // Example use: localStorageService.clearAll();
       // Should be used mostly for development purposes
       var clearAllFromLocalStorage = function (regularExpression, type) {
-        if (type) {
-          setStorageType(type);
-        }
+        setStorageType(type);
 
         // Setting both regular expressions independently
         // Empty strings result in catchall RegExp
@@ -429,7 +421,7 @@ angular
         };
 
         var setStorageType = function(type) {
-          if (storageType !== type) {
+          if (type && storageType !== type) {
             storageType = type;
             browserSupportsLocalStorage = checkSupport();
           }
@@ -481,9 +473,7 @@ angular
         // Return localStorageService.length
         // ignore keys that not owned
         var lengthOfLocalStorage = function(type) {
-          if (type) {
-            setStorageType(type);
-          }
+          setStorageType(type);
         
           var count = 0;
           var storage = $window[storageType];
