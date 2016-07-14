@@ -732,7 +732,7 @@ describe('localStorageService', function () {
 
     //localStorageChanged
     describe('localStorageChanged', function () {
-        var listeners = {}, scope = null;
+        var listeners = {};
         beforeEach(module('LocalStorageModule', function ($provide) {
             var window = jasmine.createSpyObj('$window', ['addEventListener']);
             window.localStorage = localStorageMock();
@@ -740,7 +740,7 @@ describe('localStorageService', function () {
                 listeners[event] = listener;
             });
             $provide.value('$window', window);
-            $provide.value('$timeout', function (fn) { fn() });
+            $provide.value('$timeout', function (fn) { fn(); });
             module(function (localStorageServiceProvider) {
                 localStorageServiceProvider
                   .setPrefix('test')
@@ -748,8 +748,8 @@ describe('localStorageService', function () {
             });
         }));
 
-        it('should call $window.addEventListener if storage is supported and notify.setitem is true', inject(function ($window, localStorageService) {
-            expect($window.addEventListener).toHaveBeenCalled();
+        it('should call $window.addEventListener if storage is supported and notify.setitem is true', inject(function ($window, localStorageService) { // jshint ignore:line
+          expect($window.addEventListener).toHaveBeenCalled();
             expect($window.addEventListener.calls.mostRecent().args[0] === 'storage').toBeTruthy();
             expect($window.addEventListener.calls.mostRecent().args[1] instanceof Function).toBeTruthy();
             expect($window.addEventListener.calls.mostRecent().args[2]).toEqual(false);
