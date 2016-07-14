@@ -107,7 +107,7 @@ angular
       // Check if the key is within our prefix namespace.
       var isKeyPrefixOurs = function (key) {
         return key.indexOf(prefix) === 0;
-      }
+      };
       
       // Checks the browser to see if local storage is supported
       var checkSupport = function () {
@@ -210,12 +210,21 @@ angular
       // Remove an item from local storage
       // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
       //
-      // TODO: This is var-arg removal, need to check the last (or first) argument to see if it is a storageType
-      //       and act accordingly. For now you can use setStorageType as a workaround to pick type first.
+      // This is var-arg removal, check the last argument to see if it is a storageType
+      // and set type accordingly before removing.
       //
       var removeFromLocalStorage = function () {
+        // can't pop on arguments, so we do this
+        var consumed = 0;
+        if (arguments.length >= 1 &&
+            (arguments[arguments.length - 1] === 'localStorage' ||
+             arguments[arguments.length - 1] === 'sessionStorage')) {
+          consumed = 1;
+          setStorageType(arguments[arguments.length - 1]);
+        }
+          
         var i, key;
-        for (i=0; i<arguments.length; i++) {
+        for (i = 0; i < arguments.length - consumed; i++) {
           key = arguments[i];
           if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
             if (!browserSupportsLocalStorage) {
