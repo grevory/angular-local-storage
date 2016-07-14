@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.2.8 - 2016-05-02
+ * @version v0.2.8 - 2016-07-14
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -115,7 +115,7 @@ angular
       // Check if the key is within our prefix namespace.
       var isKeyPrefixOurs = function (key) {
         return key.indexOf(prefix) === 0;
-      }
+      };
       
       // Checks the browser to see if local storage is supported
       var checkSupport = function () {
@@ -218,12 +218,21 @@ angular
       // Remove an item from local storage
       // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
       //
-      // TODO: This is var-arg removal, need to check the last (or first) argument to see if it is a storageType
-      //       and act accordingly. For now you can use setStorageType as a workaround to pick type first.
+      // This is var-arg removal, check the last argument to see if it is a storageType
+      // and set type accordingly before removing.
       //
       var removeFromLocalStorage = function () {
+        // can't pop on arguments, so we do this
+        var consumed = 0;
+        if (arguments.length >= 1 &&
+            (arguments[arguments.length - 1] === 'localStorage' ||
+             arguments[arguments.length - 1] === 'sessionStorage')) {
+          consumed = 1;
+          setStorageType(arguments[arguments.length - 1]);
+        }
+          
         var i, key;
-        for (i=0; i<arguments.length; i++) {
+        for (i = 0; i < arguments.length - consumed; i++) {
           key = arguments[i];
           if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
             if (!browserSupportsLocalStorage) {
@@ -428,8 +437,11 @@ angular
         };
 
         var setStorageType = function(type) {
-          storageType = type;
-          browserSupportsLocalStorage = checkSupport();
+          if (storageType !== type) {
+            storageType = type;
+            browserSupportsLocalStorage = checkSupport();
+          }
+          return browserSupportsLocalStorage;
         };
         
         // Add a listener on scope variable to save its changes to local storage
@@ -517,5 +529,4 @@ angular
         };
       }];
   });
-
 })(window, window.angular);

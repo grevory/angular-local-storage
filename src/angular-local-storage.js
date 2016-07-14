@@ -429,8 +429,11 @@ angular
         };
 
         var setStorageType = function(type) {
-          storageType = type;
-          browserSupportsLocalStorage = checkSupport();
+          if (storageType !== type) {
+            storageType = type;
+            browserSupportsLocalStorage = checkSupport();
+          }
+          return browserSupportsLocalStorage;
         };
         
         // Add a listener on scope variable to save its changes to local storage
