@@ -170,6 +170,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
 });
 ```
+You can also dynamically change storage type by passing the storage type as the last parameter for any of the API calls. For example: `localStorageService.set(key, val, "sessionStorage");`
 ###set
 Directly adds a value to local storage.<br/>
 If local storage is not supported, use cookies instead.<br/>
