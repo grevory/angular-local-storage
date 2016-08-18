@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.3.0 - 2016-07-29
+ * @version v0.4.0 - 2016-08-17
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -31,14 +31,16 @@ angular
     // Cookie options (usually in case of fallback)
     // expiry = Number of days before cookies expire // 0 = Does not expire
     // path = The web path the cookie represents
+    // secure = Wether the cookies should be secure (i.e only sent on HTTPS requests)
     this.cookie = {
       expiry: 30,
-      path: '/'
+      path: '/',
+      secure: false
     };
 
     // Decides wether we should default to cookies if localstorage is not supported.
     this.defaultToCookie = true;
-      
+
     // Send signals for each of the following actions?
     this.notify = {
       setItem: true,
@@ -62,9 +64,10 @@ angular
       return this;
     };
     // Setter for cookie config
-    this.setStorageCookie = function(exp, path) {
+    this.setStorageCookie = function(exp, path, secure) {
       this.cookie.expiry = exp;
       this.cookie.path = path;
+      this.cookie.secure = secure;
       return this;
     };
 
@@ -106,17 +109,17 @@ angular
       var deriveQualifiedKey = function(key) {
         return prefix + key;
       };
-      
+
       // Removes prefix from the key.
       var underiveQualifiedKey = function (key) {
         return key.replace(new RegExp('^' + prefix, 'g'), '');
       };
-      
+
       // Check if the key is within our prefix namespace.
       var isKeyPrefixOurs = function (key) {
         return key.indexOf(prefix) === 0;
       };
-      
+
       // Checks the browser to see if local storage is supported
       var checkSupport = function () {
         try {
@@ -150,7 +153,7 @@ angular
       // Example use: localStorageService.add('library','angular');
       var addToLocalStorage = function (key, value, type) {
         setStorageType(type);
-        
+
         // Let's convert undefined values to null to get the value consistent
         if (isUndefined(value)) {
           value = null;
@@ -226,7 +229,7 @@ angular
           consumed = 1;
           setStorageType(arguments[arguments.length - 1]);
         }
-          
+
         var i, key;
         for (i = 0; i < arguments.length - consumed; i++) {
           key = arguments[i];
@@ -261,7 +264,7 @@ angular
       // Example use: var keys = localStorageService.keys()
       var getKeysForLocalStorage = function (type) {
         setStorageType(type);
-        
+
         if (!browserSupportsLocalStorage) {
           $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
           return [];
@@ -332,9 +335,9 @@ angular
         }());
 
         // Directly adds a value to cookies
-        // Typically used as a fallback is local storage is not available in the browser
+        // Typically used as a fallback if local storage is not available in the browser
         // Example use: localStorageService.cookie.add('library','angular');
-        var addToCookies = function (key, value, daysToExpiry) {
+        var addToCookies = function (key, value, daysToExpiry, secure) {
 
           if (isUndefined(value)) {
             return false;
@@ -366,8 +369,22 @@ angular
             }
             if (!!key) {
               var cookiePath = "; path=" + cookie.path;
-              if(cookie.domain){
+              if (cookie.domain) {
                 cookieDomain = "; domain=" + cookie.domain;
+              }
+              /* Providing the secure parameter always takes precedence over config
+               * (allows developer to mix and match secure + non-secure) */
+              if (typeof secure === 'boolean') {
+                  if (secure === true) {
+                      /* We've explicitly specified secure,
+                       * add the secure attribute to the cookie (after domain) */
+                      cookieDomain += "; secure";
+                  }
+                  // else - secure has been supplied but isn't true - so don't set secure flag, regardless of what config says
+              }
+              else if (cookie.secure === true) {
+                  // secure parameter wasn't specified, get default from config
+                  cookieDomain += "; secure";
               }
               $document.cookie = deriveQualifiedKey(key) + "=" + encodeURIComponent(value) + expiry + cookiePath + cookieDomain;
             }
@@ -409,7 +426,7 @@ angular
         };
 
         var clearAllFromCookies = function () {
-          var thisCookie = null, thisKey = null;
+          var thisCookie = null;
           var prefixLength = prefix.length;
           var cookies = $document.cookie.split(';');
           for(var i = 0; i < cookies.length; i++) {
@@ -435,7 +452,7 @@ angular
           }
           return browserSupportsLocalStorage;
         };
-        
+
         // Add a listener on scope variable to save its changes to local storage
         // Return a function which when called cancels binding
         var bindToScope = function(scope, key, def, lsKey, type) {
@@ -482,7 +499,7 @@ angular
         // ignore keys that not owned
         var lengthOfLocalStorage = function(type) {
           setStorageType(type);
-        
+
           var count = 0;
           var storage = $window[storageType];
           for(var i = 0; i < storage.length; i++) {
