@@ -88,6 +88,7 @@ describe('localStorageService', function () {
             var expiryStringPartial = exp.substr(0, exp.indexOf(new Date().getFullYear()));
             expect($document.cookie.indexOf('expires=' + expiryStringPartial)).not.toEqual(-1);
             expect($document.cookie.indexOf('path=' + path)).not.toEqual(-1);
+            expect($document.cookie.indexOf('secure')).toEqual(-1);
         };
     }
 
@@ -97,6 +98,13 @@ describe('localStorageService', function () {
             // Just compare the expiry date, not the time, because of daylight savings
             var expiryStringPartial = exp.substr(0, exp.indexOf(new Date().getFullYear()));
             expect($document.cookie.indexOf('expires=' + expiryStringPartial)).not.toEqual(-1);
+        };
+    }
+
+    function expectCookieSecure() {
+        return function ($document, localStorageService) {
+            localStorageService.cookie.set('foo', 'bar', null, true);
+            expect($document.cookie.indexOf('secure')).not.toEqual(-1);
         };
     }
 
@@ -131,9 +139,9 @@ describe('localStorageService', function () {
         };
     }
 
-    function setStorageCookie(exp, path) {
+    function setStorageCookie(exp, path, secure) {
         return function (localStorageServiceProvider) {
-            localStorageServiceProvider.setStorageCookie(exp, path);
+            localStorageServiceProvider.setStorageCookie(exp, path, secure);
         };
     }
 
@@ -628,6 +636,10 @@ describe('localStorageService', function () {
             inject(expectCookieExpiry(new Date().addDays(10)));
         });
 
+        it('should be able to set individual cookie with secure attribute', function () {
+            inject(expectCookieSecure());
+        });
+
         it('should be able to remove from cookie', inject(function (localStorageService) {
             localStorageService.set('cookieKey', 'cookieValue');
             localStorageService.remove('cookieKey');
@@ -683,6 +695,39 @@ describe('localStorageService', function () {
             date.setDate(date.getDate() + days);
             return date.toUTCString();
         };
+    });
+
+    describe('secure cookies', function(){
+        beforeEach(module('LocalStorageModule', function ($provide) {
+            $provide.value('$window', {
+                localStorage: false,
+                sessionStorage: false,
+                navigator: {
+                    cookieEnabled: true
+                }
+            });
+            $provide.value('$document', {
+                cookie: ''
+            });
+        }));
+
+         it('should be able to set all cookies as secure via config', function () {
+            module(setStorageCookie(60, '/path', true));
+            inject(function(localStorageService, $document){
+                localStorageService.set('cookieKey', 'cookieValue');
+                expect($document.cookie.indexOf('secure')).not.toEqual(-1);
+            });
+        });
+
+        it('should be able to override secure option in config by specifying a secure flag', inject(function (localStorageService, $document) {
+            localStorageService.cookie.set('foo', 'bar', null, true);
+            expect($document.cookie.indexOf('secure')).not.toEqual(-1);
+        }));
+
+        it('should default to non-secure cookies', inject(function (localStorageService, $document) {
+            localStorageService.set('foo', 'bar');
+            expect($document.cookie.indexOf('secure')).toEqual(-1);
+        }));
     });
 
     //cookie disabled
