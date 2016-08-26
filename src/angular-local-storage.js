@@ -468,9 +468,16 @@ angular
         if (browserSupportsLocalStorage) {
             if ($window.addEventListener) {
                 $window.addEventListener("storage", handleStorageChangeCallback, false);
+                $rootScope.$on('$destroy', function() {
+                    $window.removeEventListener("storage", handleStorageChangeCallback);
+                });
             } else if($window.attachEvent){
+                // attachEvent and detachEvent are proprietary to IE v6-10
                 $window.attachEvent("onstorage", handleStorageChangeCallback);
-            };
+                $rootScope.$on('$destroy', function() {
+                    $window.detachEvent("onstorage", handleStorageChangeCallback);
+                });
+            }
         }
 
         // Callback handler for storage changed.

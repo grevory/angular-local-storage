@@ -779,10 +779,13 @@ describe('localStorageService', function () {
     describe('localStorageChanged', function () {
         var listeners = {};
         beforeEach(module('LocalStorageModule', function ($provide) {
-            var window = jasmine.createSpyObj('$window', ['addEventListener']);
+            var window = jasmine.createSpyObj('$window', ['addEventListener','removeEventListener']);
             window.localStorage = localStorageMock();
             window.addEventListener.and.callFake(function (event, listener) {
                 listeners[event] = listener;
+            });
+            window.removeEventListener.and.callFake(function (event) {
+                listeners[event] = null;
             });
             $provide.value('$window', window);
             $provide.value('$timeout', function (fn) { fn(); });
