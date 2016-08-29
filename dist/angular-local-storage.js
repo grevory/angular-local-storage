@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.4.0 - 2016-08-26
+ * @version v0.5.0 - 2016-08-29
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -477,13 +477,13 @@ angular
             if ($window.addEventListener) {
                 $window.addEventListener("storage", handleStorageChangeCallback, false);
                 $rootScope.$on('$destroy', function() {
-                  $window.removeEventListener("storage", handleStorageChangeCallback);
+                    $window.removeEventListener("storage", handleStorageChangeCallback);
                 });
             } else if($window.attachEvent){
                 // attachEvent and detachEvent are proprietary to IE v6-10
                 $window.attachEvent("onstorage", handleStorageChangeCallback);
                 $rootScope.$on('$destroy', function() {
-                  $window.detachEvent("onstorage", handleStorageChangeCallback);
+                    $window.detachEvent("onstorage", handleStorageChangeCallback);
                 });
             }
         }
