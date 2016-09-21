@@ -3,6 +3,7 @@ var isDefined = angular.isDefined,
   isNumber = angular.isNumber,
   isObject = angular.isObject,
   isArray = angular.isArray,
+  isString = angular.isString,
   extend = angular.extend,
   toJson = angular.toJson;
 
@@ -484,7 +485,7 @@ angular
         function handleStorageChangeCallback(e) {
             if (!e) { e = $window.event; }
             if (notify.setItem) {
-                if (isKeyPrefixOurs(e.key)) {
+                if (isString(e.key) && isKeyPrefixOurs(e.key)) {
                     var key = underiveQualifiedKey(e.key);
                     // Use timeout, to avoid using $rootScope.$apply.
                     $timeout(function () {
