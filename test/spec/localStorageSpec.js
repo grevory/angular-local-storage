@@ -816,6 +816,17 @@ describe('localStorageService', function () {
             expect(spy.calls.mostRecent().args[1].key === 'foo').toBeTruthy();
             expect(spy.calls.mostRecent().args[1].newvalue === 'bar').toBeTruthy();
         }));
+
+        it('localStorageChanged should not $broadcast on non-string keys', inject(function ($window, localStorageService, $rootScope) {
+            var spy = spyOn($rootScope, '$broadcast');
+            var event = {
+                key: null,
+                newValue: 'bar'
+            };
+            listeners.storage(event);
+
+            expect(spy).not.toHaveBeenCalled();
+        }));
     });
 
 
