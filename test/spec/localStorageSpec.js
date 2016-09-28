@@ -672,6 +672,13 @@ describe('localStorageService', function () {
             expect($document.cookie).not.toEqual('');
         }));
 
+        it('should be able to return a string when a cookie exceeds max integer', inject(function (localStorageService, $document) {
+            $document.cookie = 'ls.token=90071992547409919';
+            var token = localStorageService.cookie.get('token');
+            expect(token).toEqual('90071992547409919');
+            expect(token).not.toEqual('Infinity');
+        }));
+
         it('should be broadcast on adding item', function () {
             module(setNotify(true, false));
             inject(function ($rootScope, localStorageService) {

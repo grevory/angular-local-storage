@@ -405,7 +405,8 @@ angular
             if (thisCookie.indexOf(deriveQualifiedKey(key) + '=') === 0) {
               var storedValues = decodeURIComponent(thisCookie.substring(prefix.length + key.length + 1, thisCookie.length));
               try {
-                return JSON.parse(storedValues);
+                var parsedValue = JSON.parse(storedValues);
+                return typeof(parsedValue) === 'number' ? storedValues : parsedValue;
               } catch(e) {
                 return storedValues;
               }
