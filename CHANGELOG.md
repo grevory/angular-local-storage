@@ -1,3 +1,9 @@
+<a name="0.5.2"></a>
+
+# 0.5.2 (2016-09-28)
+- build v0.5.2
+- bug: prevent max integer values from cookies from being modified (#333, 331)
+
 <a name="0.2.5"></a>
 
 # 0.2.5 (2015-02-23)
