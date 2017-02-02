@@ -145,65 +145,77 @@ angular
       // If local storage is not available in the browser use cookies
       // Example use: localStorageService.add('library','angular');
       var addToLocalStorage = function (key, value, type) {
-        setStorageType(type);
-
-        // Let's convert undefined values to null to get the value consistent
-        if (isUndefined(value)) {
-          value = null;
-        } else {
-          value = toJson(value);
-        }
-
-        // If this browser does not support local storage use cookies
-        if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
-          if (!browserSupportsLocalStorage) {
-            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
-          }
-
-          if (notify.setItem) {
-            $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'cookie'});
-          }
-          return addToCookies(key, value);
-        }
+        var previousType = getStorageType();
 
         try {
-          if (webStorage) {
-            webStorage.setItem(deriveQualifiedKey(key), value);
+          setStorageType(type);
+
+          // Let's convert undefined values to null to get the value consistent
+          if (isUndefined(value)) {
+            value = null;
+          } else {
+            value = toJson(value);
           }
-          if (notify.setItem) {
-            $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: self.storageType});
+
+          // If this browser does not support local storage use cookies
+          if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
+            if (!browserSupportsLocalStorage) {
+              $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+            }
+
+            if (notify.setItem) {
+              $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'cookie'});
+            }
+            return addToCookies(key, value);
           }
-        } catch (e) {
-          $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
-          return addToCookies(key, value);
+
+          try {
+            if (webStorage) {
+              webStorage.setItem(deriveQualifiedKey(key), value);
+            }
+            if (notify.setItem) {
+              $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: self.storageType});
+            }
+          } catch (e) {
+            $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+            return addToCookies(key, value);
+          }
+          return true;
+        } finally {
+          setStorageType(previousType);
         }
-        return true;
       };
 
       // Directly get a value from local storage
       // Example use: localStorageService.get('library'); // returns 'angular'
       var getFromLocalStorage = function (key, type) {
-        setStorageType(type);
-
-        if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
-          if (!browserSupportsLocalStorage) {
-            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
-          }
-
-          return getFromCookies(key);
-        }
-
-        var item = webStorage ? webStorage.getItem(deriveQualifiedKey(key)) : null;
-        // angular.toJson will convert null to 'null', so a proper conversion is needed
-        // FIXME not a perfect solution, since a valid 'null' string can't be stored
-        if (!item || item === 'null') {
-          return null;
-        }
+        var previousType = getStorageType();
 
         try {
-          return JSON.parse(item);
-        } catch (e) {
-          return item;
+          setStorageType(type);
+
+          if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
+            if (!browserSupportsLocalStorage) {
+              $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+            }
+
+            return getFromCookies(key);
+          }
+
+          var item = webStorage ? webStorage.getItem(deriveQualifiedKey(key)) : null;
+          // angular.toJson will convert null to 'null', so a proper conversion is needed
+          // FIXME not a perfect solution, since a valid 'null' string can't be stored
+          if (!item || item === 'null') {
+            return null;
+          }
+
+          try {
+            return JSON.parse(item);
+          } catch (e) {
+            return item;
+          }
+        } finally {
+          setStorageType(previousType);
         }
       };
 
@@ -214,42 +226,48 @@ angular
       // and set type accordingly before removing.
       //
       var removeFromLocalStorage = function () {
-        // can't pop on arguments, so we do this
-        var consumed = 0;
-        if (arguments.length >= 1 &&
-            (arguments[arguments.length - 1] === 'localStorage' ||
-             arguments[arguments.length - 1] === 'sessionStorage')) {
-          consumed = 1;
-          setStorageType(arguments[arguments.length - 1]);
-        }
+        var previousType = getStorageType();
 
-        var i, key;
-        for (i = 0; i < arguments.length - consumed; i++) {
-          key = arguments[i];
-          if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
-            if (!browserSupportsLocalStorage) {
-              $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
-            }
-
-            if (notify.removeItem) {
-              $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'cookie'});
-            }
-            removeFromCookies(key);
+        try {
+          // can't pop on arguments, so we do this
+          var consumed = 0;
+          if (arguments.length >= 1 &&
+              (arguments[arguments.length - 1] === 'localStorage' ||
+               arguments[arguments.length - 1] === 'sessionStorage')) {
+            consumed = 1;
+            setStorageType(arguments[arguments.length - 1]);
           }
-          else {
-            try {
-              webStorage.removeItem(deriveQualifiedKey(key));
-              if (notify.removeItem) {
-                $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {
-                  key: key,
-                  storageType: self.storageType
-                });
+
+          var i, key;
+          for (i = 0; i < arguments.length - consumed; i++) {
+            key = arguments[i];
+            if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
+              if (!browserSupportsLocalStorage) {
+                $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
               }
-            } catch (e) {
-              $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+
+              if (notify.removeItem) {
+                $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'cookie'});
+              }
               removeFromCookies(key);
             }
+            else {
+              try {
+                webStorage.removeItem(deriveQualifiedKey(key));
+                if (notify.removeItem) {
+                  $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {
+                    key: key,
+                    storageType: self.storageType
+                  });
+                }
+              } catch (e) {
+                $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+                removeFromCookies(key);
+              }
+            }
           }
+        } finally {
+          setStorageType(previousType);
         }
       };
 
