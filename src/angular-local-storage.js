@@ -274,27 +274,34 @@ angular
       // Return array of keys for local storage
       // Example use: var keys = localStorageService.keys()
       var getKeysForLocalStorage = function (type) {
-        setStorageType(type);
+        var previousType = getStorageType();
 
-        if (!browserSupportsLocalStorage) {
-          $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
-          return [];
-        }
+        try {
+          setStorageType(type);
 
-        var prefixLength = prefix.length;
-        var keys = [];
-        for (var key in webStorage) {
-          // Only return keys that are for this app
-          if (key.substr(0, prefixLength) === prefix) {
-            try {
-              keys.push(key.substr(prefixLength));
-            } catch (e) {
-              $rootScope.$broadcast('LocalStorageModule.notification.error', e.Description);
-              return [];
+          if (!browserSupportsLocalStorage) {
+            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+            return [];
+          }
+
+          var prefixLength = prefix.length;
+          var keys = [];
+          for (var key in webStorage) {
+            // Only return keys that are for this app
+            if (key.substr(0, prefixLength) === prefix) {
+              try {
+                keys.push(key.substr(prefixLength));
+              } catch (e) {
+                $rootScope.$broadcast('LocalStorageModule.notification.error', e.Description);
+                return [];
+              }
             }
           }
+
+          return keys;
+        } finally {
+          setStorageType(previousType);
         }
-        return keys;
       };
 
       // Remove all data for this app from local storage
@@ -302,35 +309,42 @@ angular
       // Example use: localStorageService.clearAll();
       // Should be used mostly for development purposes
       var clearAllFromLocalStorage = function (regularExpression, type) {
-        setStorageType(type);
+        var previousType = getStorageType();
 
-        // Setting both regular expressions independently
-        // Empty strings result in catchall RegExp
-        var prefixRegex = !!prefix ? new RegExp('^' + prefix) : new RegExp();
-        var testRegex = !!regularExpression ? new RegExp(regularExpression) : new RegExp();
+        try {
+          setStorageType(type);
 
-        if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
-          if (!browserSupportsLocalStorage) {
-            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+          // Setting both regular expressions independently
+          // Empty strings result in catchall RegExp
+          var prefixRegex = !!prefix ? new RegExp('^' + prefix) : new RegExp();
+          var testRegex = !!regularExpression ? new RegExp(regularExpression) : new RegExp();
+
+          if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
+            if (!browserSupportsLocalStorage) {
+              $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+            }
+            return clearAllFromCookies();
           }
-          return clearAllFromCookies();
-        }
-        if (!browserSupportsLocalStorage && !self.defaultToCookie)
-          return false;
-        var prefixLength = prefix.length;
+          if (!browserSupportsLocalStorage && !self.defaultToCookie)
+            return false;
+          var prefixLength = prefix.length;
 
-        for (var key in webStorage) {
-          // Only remove items that are for this app and match the regular expression
-          if (prefixRegex.test(key) && testRegex.test(key.substr(prefixLength))) {
-            try {
-              removeFromLocalStorage(key.substr(prefixLength));
-            } catch (e) {
-              $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
-              return clearAllFromCookies();
+          for (var key in webStorage) {
+            // Only remove items that are for this app and match the regular expression
+            if (prefixRegex.test(key) && testRegex.test(key.substr(prefixLength))) {
+              try {
+                removeFromLocalStorage(key.substr(prefixLength));
+              } catch (e) {
+                $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+                return clearAllFromCookies();
+              }
             }
           }
+
+          return true;
+        } finally {
+          setStorageType(previousType);
         }
-        return true;
       };
 
       // Checks the browser to see if cookies are supported
@@ -517,16 +531,23 @@ angular
         // Return localStorageService.length
         // ignore keys that not owned
         var lengthOfLocalStorage = function(type) {
-          setStorageType(type);
+          var previousType = getStorageType();
 
-          var count = 0;
-          var storage = $window[storageType];
-          for(var i = 0; i < storage.length; i++) {
-            if(storage.key(i).indexOf(prefix) === 0 ) {
-              count++;
+          try {
+            setStorageType(type);
+
+            var count = 0;
+            var storage = $window[storageType];
+            for(var i = 0; i < storage.length; i++) {
+              if(storage.key(i).indexOf(prefix) === 0 ) {
+                count++;
+              }
             }
+            
+            return count;
+          } finally {
+            setStorageType(previousType);
           }
-          return count;
         };
 
         return {
