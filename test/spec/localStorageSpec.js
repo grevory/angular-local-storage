@@ -4,24 +4,24 @@ describe('localStorageService', function () {
     var elmSpy;
 
     //Actions
-    function getItem(key) {
+    function getItem(key, type) {
         return function ($window, localStorageService) {
             elmSpy = spyOn($window.localStorage, 'getItem').and.callThrough();
-            localStorageService.get(key);
+            localStorageService.get(key, type);
         };
     }
 
-    function addItem(key, value) {
+    function addItem(key, value, type) {
         return function ($window, localStorageService) {
             elmSpy = spyOn($window.localStorage, 'setItem').and.callThrough();
-            localStorageService.set(key, value);
+            localStorageService.set(key, value, type);
         };
     }
 
-    function removeItem(key) {
+    function removeItem(key, type) {
         return function ($window, localStorageService) {
             elmSpy = spyOn($window.localStorage, 'removeItem').and.callThrough();
-            localStorageService.remove(key);
+            localStorageService.remove(key, type);
         };
     }
 
@@ -836,5 +836,63 @@ describe('localStorageService', function () {
         }));
     });
 
+  describe('overriding the default storage type for a specific transaction', function() {
 
+    var localStorageService, sessionStorageSetSpy, sessionStorageGetSpy, sessionStorageRemoveSpy;
+
+    beforeEach(module('LocalStorageModule', function($provide) {
+      $provide.value('$window', {
+        localStorage: localStorageMock(),
+        sessionStorage: localStorageMock()
+      });
+    }));
+
+    beforeEach(inject(function($window, _localStorageService_) {
+      localStorageService = _localStorageService_;
+      sessionStorageSetSpy = spyOn($window.sessionStorage, 'setItem');
+      sessionStorageGetSpy = spyOn($window.sessionStorage, 'getItem');
+      sessionStorageRemoveSpy = spyOn($window.sessionStorage, 'removeItem');
+    }));
+
+    describe('when setting a value', function() {
+
+      it('should use the specified storage type, not affecting the default storage type', function() {
+        localStorageService.set('appKey', 777, 'sessionStorage');
+
+        expect(sessionStorageSetSpy).toHaveBeenCalledWith('ls.appKey', angular.toJson(777));
+
+        inject(
+          addItem('appKey', '777'),
+          expectAdding('ls.appKey', angular.toJson('777')),
+          expectMatching('appKey', '777')
+        );
+      });
+    });
+
+    describe('when getting a value', function() {
+      it('should use the specified storage type, not affecting the default storage type', function() {
+        localStorageService.get('appKey', 'sessionStorage');
+
+        expect(sessionStorageGetSpy).toHaveBeenCalledWith('ls.appKey');
+
+        inject(
+          getItem('appKey'),
+          expectGetting('ls.appKey')
+        );
+      });
+    });
+
+    describe('when removing a value', function() {
+      it('should use the specified storage type, not affecting the default storage type', function() {
+        localStorageService.remove('appKey', 'sessionStorage');
+
+        expect(sessionStorageRemoveSpy).toHaveBeenCalledWith('ls.appKey');
+
+        inject(
+          removeItem('appKey'),
+          expectRemoving('ls.appKey')
+        );
+      });
+    });
+  });
 });
