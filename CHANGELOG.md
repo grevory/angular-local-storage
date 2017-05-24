@@ -1,3 +1,9 @@
+<a name="0.6.0"></a>
+
+# 0.6.0 (2017-05-17)
+- build v0.6.0
+- feature: enable dynamic storage #320 #344 #351
+
 <a name="0.5.2"></a>
 
 # 0.5.2 (2016-09-28)
