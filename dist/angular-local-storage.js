@@ -1,6 +1,6 @@
 /**
  * An Angular module that gives you access to the browsers local storage
- * @version v0.6.0 - 2017-05-18
+ * @version v0.6.0 - 2017-06-21
  * @link https://github.com/grevory/angular-local-storage
  * @author grevory <greg@gregpike.ca>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -558,10 +558,15 @@ angular
           }
         };
 
+        var changePrefix = function(localStoragePrefix) {
+          prefix = localStoragePrefix;
+        };
+
         return {
           isSupported: browserSupportsLocalStorage,
           getStorageType: getStorageType,
           setStorageType: setStorageType,
+          setPrefix: changePrefix,
           set: addToLocalStorage,
           add: addToLocalStorage, //DEPRECATED
           get: getFromLocalStorage,

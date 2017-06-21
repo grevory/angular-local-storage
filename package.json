@@ -25,7 +25,8 @@
     "url": "https://github.com/grevory/angular-local-storage/issues"
   },
   "devDependencies": {
-    "grunt": "~0.4.2",
+    "grunt": "^0.4.5",
+    "grunt-cli": "~0.1.9",
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "~0.12.0",
     "grunt-contrib-uglify": "*",
