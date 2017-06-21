@@ -511,10 +511,15 @@ angular
           return count;
         };
 
+        var changePrefix = function(localStoragePrefix) {
+          prefix = localStoragePrefix;
+        };
+
         return {
           isSupported: browserSupportsLocalStorage,
           getStorageType: getStorageType,
           setStorageType: setStorageType,
+          setPrefix: changePrefix,
           set: addToLocalStorage,
           add: addToLocalStorage, //DEPRECATED
           get: getFromLocalStorage,

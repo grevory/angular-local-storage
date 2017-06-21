@@ -24,6 +24,7 @@ An Angular module that gives you access to the browsers local storage
  - [Example](#configuration-example)
 - [API Documentation](#api-documentation)
  - [isSupported](#issupported)
+ - [changePrefix]
  - [getStorageType](#getstoragetype)
  - [set](#set)
  - [get](#get)
@@ -162,9 +163,19 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
 });
 ```
+###changePrefix
+Change the local storage prefix during execution
+**Returns:** `Null`
+```js
+myApp.controller('MainCtrl', function($scope, localStorageService) {
+  //...
+  localStorageService.changePrefix('newPrefix');
+  //...
+});
+```
 ###getStorageType
 **Returns:** `String`
-```js
+```
 myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
   var storageType = localStorageService.getStorageType(); //e.g localStorage

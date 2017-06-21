@@ -187,6 +187,18 @@ describe('localStorageService', function () {
         );
     });
 
+    it('should support changing prefix on the fly', function() {
+        module(function(localStorageServiceProvider) {
+            localStorageServiceProvider.setPrefix('startPrefix');
+        });
+
+        inject(function(localStorageService) {
+            localStorageService.setPrefix('newPrefix');
+            localStorageService.add('foo', 'bar');
+            expectAdding('newPrefix.foo', 'bar');
+        });
+    });
+
     it('should be able to chain functions in the config phase', function () {
         module(function (localStorageServiceProvider) {
             localStorageServiceProvider
