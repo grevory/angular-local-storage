@@ -163,7 +163,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
 });
 ```
-###setPrefix
+### setPrefix
 Change the local storage prefix during execution
 **Returns:** `Null`
 ```js
@@ -173,7 +173,7 @@ myApp.controller('MainCtrl', function($scope, localStorageService) {
   //...
 });
 ```
-###getStorageType
+### getStorageType
 **Returns:** `String`
 ```
 myApp.controller('MainCtrl', function($scope, localStorageService) {
